@@ -1,0 +1,46 @@
+.galaxy-container {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.galaxy-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: radial-gradient(
+        ellipse at bottom,
+        #223344 0%,
+        #090a0f 100%
+    );
+}
+
+.content-layer {
+    position: relative;
+    z-index: 2;
+}
+
+@keyframes animStar {
+    from { transform: translateY(0px); }
+    to { transform: translateY(-2000px); }
+}
+
+#stars1, #stars2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#stars1 {
+    width: 1px;
+    height: 1px;
+    background: transparent;
+    animation: animStar 120s linear infinite;
+}
+
+#stars2 {
+    width: 2px;
+    height: 2px;
+    background: transparent;
+    animation: animStar 180s linear infinite;
+}
