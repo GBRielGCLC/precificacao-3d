@@ -9,6 +9,10 @@ function App() {
       <ConfirmDialogProvider>
         <PersonalizedToast />
 
+        <div id="stars1" />
+        <div id="stars2" />
+        <div id="stars3" />
+
         <Precificacao3D />
       </ConfirmDialogProvider>
     </AppThemeProvider>
