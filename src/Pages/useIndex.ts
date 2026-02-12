@@ -114,11 +114,8 @@ export const useIndex = () => {
 
     return {
         historico,
-        salvarHistorico,
         limparHistorico,
-        calcular,
         handleSubmit: handleSubmitHookForm(onSubmit),
         control,
-        errors,
     };
 };

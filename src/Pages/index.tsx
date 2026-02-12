@@ -10,15 +10,13 @@ import {
     Divider,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Controller, useForm } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import TextField from "@mui/material/TextField";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { useIndex } from "./useIndex";
 import "../Styles/galaxy.css";
-import { yup } from "../Yup";
 
 export const Precificacao3D = () => {
-    const { historico, limparHistorico, handleSubmit, control, errors } = useIndex();
+    const { historico, limparHistorico, handleSubmit, control } = useIndex();
 
     return (
         <Box className="galaxy-container">
