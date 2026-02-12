@@ -38,7 +38,6 @@ export const useIndex = () => {
         handleSubmit: handleSubmitHookForm,
         control,
         reset,
-        formState: { errors },
     } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
