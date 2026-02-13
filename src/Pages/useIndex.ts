@@ -1,7 +1,8 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yup } from "../Yup";
+import { useAppConfig } from "../Contexts";
 
 export interface IHistoricoItem {
     id: number;
@@ -9,18 +10,18 @@ export interface IHistoricoItem {
     tempoMin: number;
     peso: number;
     lucroPercentual: number;
-    embalagem?: number;
+    valorAdicional?: number;
     custoBase: number;
     valorFinal: number;
     data: string;
 }
 
-interface IForm {
+export interface IForm {
     nome?: string;
     tempoMin: number;
     peso: number;
     lucroPercentual: number;
-    embalagem?: number;
+    valorAdicional?: number;
 }
 
 const STORAGE_KEY = "precificacao_3d_historico";
@@ -30,24 +31,32 @@ const schema = yup.object({
     tempoMin: yup.number().required().positive(),
     peso: yup.number().required().positive(),
     lucroPercentual: yup.number().required().min(0),
-    embalagem: yup.number(),
+    valorAdicional: yup.number(),
 });
 
 export const useIndex = () => {
+    const { config, openConfig } = useAppConfig();
+
     const {
         handleSubmit: handleSubmitHookForm,
         control,
         reset,
+        setValue,
+        watch
     } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
-            lucroPercentual: undefined,
-            embalagem: undefined,
+            lucroPercentual: config.lucroPadrao,
+            valorAdicional: undefined,
             peso: undefined,
             nome: "",
             tempoMin: undefined,
         }
     });
+
+    useEffect(() => {
+        setValue("lucroPercentual", config.lucroPadrao);
+    }, [config.lucroPadrao]);
 
     const [historico, setHistorico] = useState<IHistoricoItem[]>([]);
 
@@ -71,21 +80,17 @@ export const useIndex = () => {
         tempoMin,
         peso,
         lucroPercentual,
-        embalagem = 0,
+        valorAdicional = 0,
     }: {
         tempoMin: number;
         peso: number;
         lucroPercentual: number;
-        embalagem?: number;
+        valorAdicional?: number;
     }) => {
-        const custoMinuto = 0.03;
-        const custoGrama = 0.15;
+        const custoTempo = tempoMin * config.custoMinuto;
+        const custoMaterial = peso * config.custoGrama;
 
-        const custoTempo = tempoMin * custoMinuto;
-
-        const custoMaterial = peso * custoGrama;
-
-        const custoBase = custoTempo + custoMaterial + embalagem;
+        const custoBase = custoTempo + custoMaterial + valorAdicional;
 
         const valorFinal =
             custoBase + custoBase * (lucroPercentual / 100);
@@ -95,9 +100,23 @@ export const useIndex = () => {
 
     const gerarId = () => Date.now() + Math.floor(Math.random() * 1000);
 
-    const onSubmit:SubmitHandler<IForm> = (data) => {
-        console.log(data);
+    const tempoMin = watch("tempoMin");
+    const peso = watch("peso");
+    const lucroPercentual = watch("lucroPercentual");
+    const valorAdicional = watch("valorAdicional");
 
+    const preview = useMemo(() => {
+        if (!tempoMin || !peso || lucroPercentual === undefined) return null;
+
+        return calcular({
+            tempoMin,
+            peso,
+            lucroPercentual,
+            valorAdicional,
+        });
+    }, [tempoMin, peso, lucroPercentual, valorAdicional]);
+
+    const onSubmit: SubmitHandler<IForm> = (data) => {
         const { custoBase, valorFinal } = calcular(data);
 
         salvarHistorico({
@@ -108,13 +127,24 @@ export const useIndex = () => {
             data: new Date().toLocaleString(),
         });
 
-        reset();
+        reset({ lucroPercentual: config.lucroPadrao, });
     };
 
     return {
+        openConfig,
+
         historico,
         limparHistorico,
         handleSubmit: handleSubmitHookForm(onSubmit),
         control,
+
+        preview: {
+            tempoMin,
+            peso,
+            lucroPercentual,
+            valorAdicional,
+            config,
+            resultado: preview,
+        },
     };
 };
