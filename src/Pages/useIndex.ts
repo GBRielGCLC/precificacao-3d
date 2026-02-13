@@ -56,7 +56,7 @@ export const useIndex = () => {
 
     useEffect(() => {
         setValue("lucroPercentual", config.lucroPadrao);
-    }, [config.lucroPadrao]);
+    }, [config.lucroPadrao, setValue]);
 
     const [historico, setHistorico] = useState<IHistoricoItem[]>([]);
 
@@ -102,7 +102,7 @@ export const useIndex = () => {
 
     const tempoMin = watch("tempoMin");
     const peso = watch("peso");
-    const lucroPercentual = watch("lucroPercentual");
+    const lucroPercentual = watch("lucroPercentual") ?? config.lucroPadrao;
     const valorAdicional = watch("valorAdicional");
 
     const preview = useMemo(() => {
@@ -114,7 +114,7 @@ export const useIndex = () => {
             lucroPercentual,
             valorAdicional,
         });
-    }, [tempoMin, peso, lucroPercentual, valorAdicional]);
+    }, [tempoMin, peso, lucroPercentual, valorAdicional, calcular]);
 
     const onSubmit: SubmitHandler<IForm> = (data) => {
         const { custoBase, valorFinal } = calcular(data);
