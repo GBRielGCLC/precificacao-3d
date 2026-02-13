@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yup } from "../Yup";
 import { useAppConfig } from "../Contexts";
@@ -76,7 +76,7 @@ export const useIndex = () => {
         localStorage.removeItem(STORAGE_KEY);
     };
 
-    const calcular = ({
+    const calcular = useCallback(({
         tempoMin,
         peso,
         lucroPercentual,
@@ -96,7 +96,7 @@ export const useIndex = () => {
             (custoBase + custoBase * (lucroPercentual / 100)) + valorAdicional;
 
         return { custoBase, valorFinal };
-    };
+    }, [config.custoGrama, config.custoMinuto]);
 
     const gerarId = () => Date.now() + Math.floor(Math.random() * 1000);
 
