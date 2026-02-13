@@ -58,15 +58,15 @@ export const ConfigDrawer = ({ open, onClose }: Props) => {
                 />
 
                 <Controller
-                    name="custoGrama"
+                    name="custoKG"
                     control={control}
                     render={({ field }) => (
                         <TextField
                             {...field}
                             type="number"
-                            label="Custo por Grama (R$)"
-                            error={!!errors.custoGrama}
-                            helperText={errors.custoGrama?.message}
+                            label="Preço do KG"
+                            error={!!errors.custoKG}
+                            helperText={errors.custoKG?.message}
                             fullWidth
                         />
                     )}

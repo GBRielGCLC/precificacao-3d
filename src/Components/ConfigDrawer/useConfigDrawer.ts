@@ -3,24 +3,19 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yup } from "../../Yup";
 import { useAppConfig } from "../../Contexts";
+import { defaultConfig as defaultValues } from "../../Contexts";
 
 export interface IFormConfig {
     custoMinuto: number;
-    custoGrama: number;
+    custoKG: number;
     lucroPadrao: number;
 }
 
 const schema = yup.object({
     custoMinuto: yup.number().required().min(0),
-    custoGrama: yup.number().required().min(0),
+    custoKG: yup.number().required().min(0),
     lucroPadrao: yup.number().required().min(0),
 });
-
-const defaultValues: IFormConfig = {
-    custoMinuto: 0.05,
-    custoGrama: 0.15,
-    lucroPadrao: 30,
-};
 
 interface Props {
     open: boolean;

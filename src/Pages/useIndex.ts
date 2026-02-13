@@ -88,7 +88,7 @@ export const useIndex = () => {
         valorAdicional?: number;
     }) => {
         const custoTempo = tempoMin * config.custoMinuto;
-        const custoMaterial = peso * config.custoGrama;
+        const custoMaterial = peso * (config.custoKG/1000);
 
         const custoBase = custoTempo + custoMaterial;
 
@@ -96,7 +96,7 @@ export const useIndex = () => {
             (custoBase + custoBase * (lucroPercentual / 100)) + valorAdicional;
 
         return { custoBase, valorFinal };
-    }, [config.custoGrama, config.custoMinuto]);
+    }, [config.custoKG, config.custoMinuto]);
 
     const gerarId = () => Date.now() + Math.floor(Math.random() * 1000);
 
