@@ -33,10 +33,6 @@ export const Precificacao3D = () => {
     const { toggleTheme, themeName } = useAppThemeContext();
     const theme = useTheme();
 
-    function previewCalculo () {
-        
-    }
-
     return (
         <Container maxWidth="md" className="content-layer">
             <Box py={4}>
@@ -355,7 +351,7 @@ export const Precificacao3D = () => {
                         justifyContent="space-between"
                         alignItems="center"
                     >
-                        <Typography variant="h5" color="white">
+                        <Typography variant="h5" color="textPrimary">
                             Histórico
                         </Typography>
 
