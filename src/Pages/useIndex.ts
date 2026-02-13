@@ -90,10 +90,10 @@ export const useIndex = () => {
         const custoTempo = tempoMin * config.custoMinuto;
         const custoMaterial = peso * config.custoGrama;
 
-        const custoBase = custoTempo + custoMaterial + valorAdicional;
+        const custoBase = custoTempo + custoMaterial;
 
         const valorFinal =
-            custoBase + custoBase * (lucroPercentual / 100);
+            (custoBase + custoBase * (lucroPercentual / 100)) + valorAdicional;
 
         return { custoBase, valorFinal };
     };
