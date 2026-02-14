@@ -256,10 +256,10 @@ export const Precificacao3D = () => {
                                                 {/* Material */}
                                                 <Box display="flex" justifyContent="space-between">
                                                     <Typography variant="body2" color="text.secondary">
-                                                        Material ({preview.peso}g × R$ {preview.config.custoKG.toFixed(2)})
+                                                        Material ({preview.peso}g × R$ {(preview.config.custoKG/1000).toFixed(2)})
                                                     </Typography>
                                                     <Typography variant="body2">
-                                                        R$ {(preview.peso * preview.config.custoKG).toFixed(2)}
+                                                        R$ {(preview.peso * (preview.config.custoKG)/1000).toFixed(2)}
                                                     </Typography>
                                                 </Box>
 
