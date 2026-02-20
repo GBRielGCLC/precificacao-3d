@@ -46,19 +46,26 @@ export const Precificacao3D = () => {
                             <Settings />
                         </IconButton>
 
-                        <IconButton onClick={toggleTheme} color='inherit'>
+                        <IconButton onClick={toggleTheme} color="inherit">
                             <Box
                                 sx={{
                                     display: "flex",
                                     alignItems: "center",
                                     justifyContent: "center",
                                     color: theme.palette.primary.main,
-                                    transition: "transform 0.8s ease, opacity 0.4s ease",
-                                    transform: `rotate(${themeName === "light" ? 0 : 360}deg)`,
+                                    transition:
+                                        "transform 0.8s ease, opacity 0.4s ease",
+                                    transform: `rotate(${
+                                        themeName === "light" ? 0 : 360
+                                    }deg)`,
                                     opacity: 1,
                                 }}
                             >
-                                {themeName === 'light' ? <DarkMode /> : <LightMode />}
+                                {themeName === "light" ? (
+                                    <DarkMode />
+                                ) : (
+                                    <LightMode />
+                                )}
                             </Box>
                         </IconButton>
                     </Box>
@@ -79,7 +86,9 @@ export const Precificacao3D = () => {
                                                 type="text"
                                                 label="Nome"
                                                 error={!!fieldState.error}
-                                                helperText={fieldState.error?.message}
+                                                helperText={
+                                                    fieldState.error?.message
+                                                }
                                             />
                                         )}
                                     />
@@ -97,19 +106,23 @@ export const Precificacao3D = () => {
                                                     field.onChange(
                                                         e.target.value === ""
                                                             ? undefined
-                                                            : Number(e.target.value)
+                                                            : Number(
+                                                                  e.target.value
+                                                              )
                                                     )
                                                 }
                                                 value={
                                                     field.value === undefined
-                                                        ? ''
+                                                        ? ""
                                                         : field.value
                                                 }
                                                 fullWidth
                                                 type="number"
                                                 label="Tempo (min)"
                                                 error={!!fieldState.error}
-                                                helperText={fieldState.error?.message}
+                                                helperText={
+                                                    fieldState.error?.message
+                                                }
                                                 required
                                             />
                                         )}
@@ -128,19 +141,58 @@ export const Precificacao3D = () => {
                                                     field.onChange(
                                                         e.target.value === ""
                                                             ? undefined
-                                                            : Number(e.target.value)
+                                                            : Number(
+                                                                  e.target.value
+                                                              )
                                                     )
                                                 }
                                                 value={
                                                     field.value === undefined
-                                                        ? ''
+                                                        ? ""
                                                         : field.value
                                                 }
                                                 fullWidth
                                                 type="number"
                                                 label="Peso (g)"
                                                 error={!!fieldState.error}
-                                                helperText={fieldState.error?.message}
+                                                helperText={
+                                                    fieldState.error?.message
+                                                }
+                                                required
+                                            />
+                                        )}
+                                    />
+                                </Grid>
+
+                                {/* Lucro */}
+                                <Grid size={{ xs: 12, sm: 6 }}>
+                                    <Controller
+                                        name="quantide"
+                                        control={control}
+                                        render={({ field, fieldState }) => (
+                                            <TextField
+                                                {...field}
+                                                onChange={(e) =>
+                                                    field.onChange(
+                                                        e.target.value === ""
+                                                            ? undefined
+                                                            : Number(
+                                                                  e.target.value
+                                                              )
+                                                    )
+                                                }
+                                                value={
+                                                    field.value === undefined
+                                                        ? ""
+                                                        : field.value
+                                                }
+                                                fullWidth
+                                                type="number"
+                                                label="Quantidade"
+                                                error={!!fieldState.error}
+                                                helperText={
+                                                    fieldState.error?.message
+                                                }
                                                 required
                                             />
                                         )}
@@ -159,19 +211,23 @@ export const Precificacao3D = () => {
                                                     field.onChange(
                                                         e.target.value === ""
                                                             ? undefined
-                                                            : Number(e.target.value)
+                                                            : Number(
+                                                                  e.target.value
+                                                              )
                                                     )
                                                 }
                                                 value={
                                                     field.value === undefined
-                                                        ? ''
+                                                        ? ""
                                                         : field.value
                                                 }
                                                 fullWidth
                                                 type="number"
                                                 label="Lucro (%)"
                                                 error={!!fieldState.error}
-                                                helperText={fieldState.error?.message}
+                                                helperText={
+                                                    fieldState.error?.message
+                                                }
                                                 required
                                                 slotProps={{
                                                     input: {
@@ -199,19 +255,23 @@ export const Precificacao3D = () => {
                                                     field.onChange(
                                                         e.target.value === ""
                                                             ? undefined
-                                                            : Number(e.target.value)
+                                                            : Number(
+                                                                  e.target.value
+                                                              )
                                                     )
                                                 }
                                                 value={
                                                     field.value === undefined
-                                                        ? ''
+                                                        ? ""
                                                         : field.value
                                                 }
                                                 fullWidth
                                                 type="number"
                                                 label="Valor Adicional"
                                                 error={!!fieldState.error}
-                                                helperText={fieldState.error?.message}
+                                                helperText={
+                                                    fieldState.error?.message
+                                                }
                                                 slotProps={{
                                                     input: {
                                                         startAdornment: (
@@ -226,109 +286,206 @@ export const Precificacao3D = () => {
                                     />
                                 </Grid>
 
-                                {preview && (<Grid size={{ xs: 12 }}>
+                                {preview && (
+                                    <Grid size={{ xs: 12 }}>
+                                        <Card
+                                            sx={{
+                                                mt: 4,
+                                                backdropFilter: "blur(10px)",
+                                                backgroundColor:
+                                                    "rgba(255,255,255,0.05)",
+                                                border: "1px solid rgba(255,255,255,0.1)",
+                                            }}
+                                        >
+                                            <CardContent>
+                                                <Typography
+                                                    variant="h6"
+                                                    gutterBottom
+                                                >
+                                                    Prévia do Cálculo
+                                                </Typography>
 
-                                    <Card
-                                        sx={{
-                                            mt: 4,
-                                            backdropFilter: "blur(10px)",
-                                            backgroundColor: "rgba(255,255,255,0.05)",
-                                            border: "1px solid rgba(255,255,255,0.1)",
-                                        }}
-                                    >
-                                        <CardContent>
-                                            <Typography variant="h6" gutterBottom>
-                                                Prévia do Cálculo
-                                            </Typography>
-
-                                            <Box display="flex" flexDirection="column" gap={1.5}>
-
-                                                {/* Tempo */}
-                                                <Box display="flex" justifyContent="space-between">
-                                                    <Typography variant="body2" color="text.secondary">
-                                                        Tempo ({preview.tempoMin} min × R$ {preview.config.custoMinuto.toFixed(2)})
-                                                    </Typography>
-                                                    <Typography variant="body2">
-                                                        R$ {((preview.tempoMin * preview.config.custoMinuto)).toFixed(2)}
-                                                    </Typography>
-                                                </Box>
-
-                                                {/* Material */}
-                                                <Box display="flex" justifyContent="space-between">
-                                                    <Typography variant="body2" color="text.secondary">
-                                                        Material ({preview.peso}g × R$ {(preview.config.custoKG/1000).toFixed(2)})
-                                                    </Typography>
-                                                    <Typography variant="body2">
-                                                        R$ {(preview.peso * (preview.config.custoKG)/1000).toFixed(2)}
-                                                    </Typography>
-                                                </Box>
-
-                                                {/* Extra */}
-                                                {preview.valorAdicional ? (
-                                                    <Box display="flex" justifyContent="space-between">
-                                                        <Typography variant="body2" color="text.secondary">
-                                                            Valor adicional
+                                                <Box
+                                                    display="flex"
+                                                    flexDirection="column"
+                                                    gap={1.5}
+                                                >
+                                                    {/* Tempo */}
+                                                    <Box
+                                                        display="flex"
+                                                        justifyContent="space-between"
+                                                    >
+                                                        <Typography
+                                                            variant="body2"
+                                                            color="text.secondary"
+                                                        >
+                                                            Tempo (
+                                                            {preview.tempoMin}{" "}
+                                                            min × R${" "}
+                                                            {preview.config.custoMinuto.toFixed(
+                                                                2
+                                                            )}
+                                                            )
                                                         </Typography>
                                                         <Typography variant="body2">
-                                                            R$ {preview.valorAdicional.toFixed(2)}
+                                                            R${" "}
+                                                            {preview.resultado?.custoTempo.toFixed(
+                                                                2
+                                                            )}
                                                         </Typography>
                                                     </Box>
-                                                ) : null}
 
-                                                <Divider sx={{ my: 1 }} />
+                                                    {/* Material */}
+                                                    <Box
+                                                        display="flex"
+                                                        justifyContent="space-between"
+                                                    >
+                                                        <Typography
+                                                            variant="body2"
+                                                            color="text.secondary"
+                                                        >
+                                                            Material (
+                                                            {preview.peso}g × R${" "}
+                                                            {(
+                                                                preview.config
+                                                                    .custoKG /
+                                                                1000
+                                                            ).toFixed(2)}
+                                                            )
+                                                        </Typography>
+                                                        <Typography variant="body2">
+                                                            R${" "}
+                                                            {preview.resultado?.custoMaterial.toFixed(
+                                                                2
+                                                            )}
+                                                        </Typography>
+                                                    </Box>
 
-                                                {preview.resultado && (
-                                                    <>
-                                                        {/* Custo base */}
-                                                        <Box display="flex" justifyContent="space-between">
-                                                            <Typography fontWeight={600}>
-                                                                Custo Base
-                                                            </Typography>
-                                                            <Typography fontWeight={600}>
-                                                                R$ {preview.resultado.custoBase.toFixed(2)}
-                                                            </Typography>
-                                                        </Box>
-
-                                                        {/* Lucro */}
-                                                        <Box display="flex" justifyContent="space-between">
-                                                            <Typography variant="body2" color="text.secondary">
-                                                                Lucro ({preview.lucroPercentual}%)
-                                                            </Typography>
-                                                            <Typography variant="body2">
-                                                                + R$ {(preview.resultado.custoBase * (preview.lucroPercentual / 100)).toFixed(2)}
-                                                            </Typography>
-                                                        </Box>
-
-                                                        <Divider sx={{ my: 1.5 }} />
-
-                                                        {/* Total final */}
+                                                    {/* Extra */}
+                                                    {preview.valorAdicional ? (
                                                         <Box
                                                             display="flex"
                                                             justifyContent="space-between"
-                                                            alignItems="center"
                                                         >
-                                                            <Typography variant="h6">
-                                                                Valor Final
-                                                            </Typography>
-
                                                             <Typography
-                                                                variant="h5"
-                                                                sx={{
-                                                                    color: "primary.main",
-                                                                    fontWeight: 700,
-                                                                }}
+                                                                variant="body2"
+                                                                color="text.secondary"
                                                             >
-                                                                R$ {preview.resultado.valorFinal.toFixed(2)}
+                                                                Valor adicional
+                                                            </Typography>
+                                                            <Typography variant="body2">
+                                                                R${" "}
+                                                                {preview.valorAdicional.toFixed(
+                                                                    2
+                                                                )}
                                                             </Typography>
                                                         </Box>
-                                                    </>
-                                                )}
+                                                    ) : null}
 
-                                            </Box>
-                                        </CardContent>
-                                    </Card>
+                                                    <Divider sx={{ my: 1 }} />
 
-                                </Grid>)}
+                                                    {preview.resultado && (
+                                                        <>
+                                                            {/* Custo base */}
+                                                            <Box
+                                                                display="flex"
+                                                                justifyContent="space-between"
+                                                            >
+                                                                <Typography
+                                                                    variant="body2"
+                                                                    color="text.secondary"
+                                                                >
+                                                                    Custo Base
+                                                                </Typography>
+                                                                <Typography variant="body2">
+                                                                    R${" "}
+                                                                    {preview.resultado.custoBase.toFixed(
+                                                                        2
+                                                                    )}
+                                                                </Typography>
+                                                            </Box>
+
+                                                            {/* Lucro */}
+                                                            <Box
+                                                                display="flex"
+                                                                justifyContent="space-between"
+                                                            >
+                                                                <Typography
+                                                                    variant="body2"
+                                                                    color="text.secondary"
+                                                                >
+                                                                    Lucro (
+                                                                    {
+                                                                        preview.lucroPercentual
+                                                                    }
+                                                                    %)
+                                                                </Typography>
+                                                                <Typography variant="body2">
+                                                                    R${" "}
+                                                                    {preview.resultado.valorPorcentagem.toFixed(
+                                                                        2
+                                                                    )}
+                                                                </Typography>
+                                                            </Box>
+
+                                                            <Divider
+                                                                sx={{ my: 1.5 }}
+                                                            />
+
+                                                            {/* Total final */}
+                                                            <Box
+                                                                display="flex"
+                                                                justifyContent="space-between"
+                                                                alignItems="center"
+                                                            >
+                                                                <Typography variant="h6">
+                                                                    Valor Final
+                                                                </Typography>
+
+                                                                <Typography
+                                                                    variant="h5"
+                                                                    sx={{
+                                                                        color: "primary.main",
+                                                                        fontWeight: 700,
+                                                                    }}
+                                                                >
+                                                                    R${" "}
+                                                                    {preview.resultado.valorFinal.toFixed(
+                                                                        2
+                                                                    )}
+                                                                </Typography>
+
+                                                                {!!preview.quantidade &&
+                                                                    preview.quantidade >
+                                                                        1 && (
+                                                                        <>
+                                                                            <Typography variant="h6">
+                                                                                Valor
+                                                                                Unidade
+                                                                            </Typography>
+
+                                                                            <Typography
+                                                                                variant="h5"
+                                                                                sx={{
+                                                                                    color: "primary.main",
+                                                                                    fontWeight: 700,
+                                                                                }}
+                                                                            >
+                                                                                R${" "}
+                                                                                {preview.resultado.precoUnidade.toFixed(
+                                                                                    2
+                                                                                )}
+                                                                            </Typography>
+                                                                        </>
+                                                                    )}
+                                                            </Box>
+                                                        </>
+                                                    )}
+                                                </Box>
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
+                                )}
 
                                 <Grid size={{ xs: 12 }}>
                                     <Button

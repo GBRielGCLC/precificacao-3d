@@ -72,21 +72,6 @@ export const ConfigDrawer = ({ open, onClose }: Props) => {
                     )}
                 />
 
-                <Controller
-                    name="lucroPadrao"
-                    control={control}
-                    render={({ field }) => (
-                        <TextField
-                            {...field}
-                            type="number"
-                            label="Lucro Padrão (%)"
-                            error={!!errors.lucroPadrao}
-                            helperText={errors.lucroPadrao?.message}
-                            fullWidth
-                        />
-                    )}
-                />
-
                 <Button
                     variant="contained"
                     type="submit"

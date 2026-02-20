@@ -20,6 +20,7 @@ export interface IForm {
     nome?: string;
     tempoMin: number;
     peso: number;
+    quantidade: number;
     lucroPercentual: number;
     valorAdicional?: number;
 }
@@ -30,6 +31,7 @@ const schema = yup.object({
     nome: yup.string(),
     tempoMin: yup.number().required().positive(),
     peso: yup.number().required().positive(),
+    quantide: yup.number().required().positive(),
     lucroPercentual: yup.number().required().min(0),
     valorAdicional: yup.number(),
 });
@@ -42,21 +44,22 @@ export const useIndex = () => {
         control,
         reset,
         setValue,
-        watch
+        watch,
     } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
-            lucroPercentual: config.lucroPadrao,
+            lucroPercentual: undefined,
             valorAdicional: undefined,
             peso: undefined,
+            quantide: undefined,
             nome: "",
             tempoMin: undefined,
-        }
+        },
     });
 
     useEffect(() => {
-        setValue("lucroPercentual", config.lucroPadrao);
-    }, [config.lucroPadrao, setValue]);
+        setValue("lucroPercentual", 50);
+    }, [setValue]);
 
     const [historico, setHistorico] = useState<IHistoricoItem[]>([]);
 
@@ -76,45 +79,79 @@ export const useIndex = () => {
         localStorage.removeItem(STORAGE_KEY);
     };
 
-    const calcular = useCallback(({
-        tempoMin,
-        peso,
-        lucroPercentual,
-        valorAdicional = 0,
-    }: {
-        tempoMin: number;
-        peso: number;
-        lucroPercentual: number;
-        valorAdicional?: number;
-    }) => {
-        const custoTempo = tempoMin * config.custoMinuto;
-        const custoMaterial = peso * (config.custoKG/1000);
+    const calcular = useCallback(
+        ({
+            tempoMin,
+            peso,
+            lucroPercentual,
+            valorAdicional = 0,
+            quantidade,
+        }: {
+            tempoMin: number;
+            peso: number;
+            lucroPercentual: number;
+            valorAdicional?: number;
+            quantidade: number;
+        }) => {
+            let custoTempo = 0;
+            if (!!tempoMin && tempoMin > 0)
+                custoTempo = tempoMin * config.custoMinuto;
 
-        const custoBase = custoTempo + custoMaterial;
+            let custoMaterial = 0;
+            if (!!peso && peso > 0)
+                custoMaterial = peso * (config.custoKG / 1000);
 
-        const valorFinal =
-            (custoBase + custoBase * (lucroPercentual / 100)) + valorAdicional;
+            const custoBase = custoTempo + custoMaterial;
 
-        return { custoBase, valorFinal };
-    }, [config.custoKG, config.custoMinuto]);
+            let valorFinal = custoBase;
+            let valorPorcentagem = 0;
+
+            if (!!lucroPercentual && lucroPercentual > 0){
+                
+                valorPorcentagem = custoBase * (lucroPercentual / 100)
+                
+                valorFinal =
+                    custoBase +
+                    valorPorcentagem +
+                    valorAdicional;
+            }
+
+            let precoUnidade = valorFinal;
+
+            if (!!quantidade && quantidade > 0)
+                precoUnidade = valorFinal / quantidade;
+
+            return {
+                custoBase,
+                valorFinal,
+                precoUnidade,
+                custoMaterial,
+                custoTempo,
+                valorPorcentagem,
+            };
+        },
+        [config.custoKG, config.custoMinuto]
+    );
 
     const gerarId = () => Date.now() + Math.floor(Math.random() * 1000);
 
     const tempoMin = watch("tempoMin");
     const peso = watch("peso");
-    const lucroPercentual = watch("lucroPercentual") ?? config.lucroPadrao;
+    const lucroPercentual = watch("lucroPercentual");
     const valorAdicional = watch("valorAdicional");
+    const quantidade = watch("quantide");
 
     const preview = useMemo(() => {
-        if (!tempoMin || !peso || lucroPercentual === undefined) return null;
+        //if (!tempoMin || !peso || lucroPercentual === undefined) return null;
 
         return calcular({
             tempoMin,
             peso,
             lucroPercentual,
             valorAdicional,
+            quantidade,
         });
-    }, [tempoMin, peso, lucroPercentual, valorAdicional, calcular]);
+    }, [tempoMin, peso, lucroPercentual, valorAdicional, quantidade, calcular]);
 
     const onSubmit: SubmitHandler<IForm> = (data) => {
         const { custoBase, valorFinal } = calcular(data);
@@ -127,7 +164,7 @@ export const useIndex = () => {
             data: new Date().toLocaleString(),
         });
 
-        reset({ lucroPercentual: config.lucroPadrao, });
+        reset();
     };
 
     return {
@@ -135,6 +172,7 @@ export const useIndex = () => {
 
         historico,
         limparHistorico,
+        //@ts-expect-error
         handleSubmit: handleSubmitHookForm(onSubmit),
         control,
 
@@ -143,6 +181,7 @@ export const useIndex = () => {
             peso,
             lucroPercentual,
             valorAdicional,
+            quantidade,
             config,
             resultado: preview,
         },

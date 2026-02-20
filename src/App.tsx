@@ -15,7 +15,7 @@ function App() {
           <div id="stars2" />
           <div id="stars3" />
 
-          <Precificacao3D />
+          <Precificacao3D />          
         </AppConfigProvider>
       </ConfirmDialogProvider>
     </AppThemeProvider>

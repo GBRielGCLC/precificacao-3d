@@ -10,7 +10,6 @@ import { ConfigDrawer } from "../Components/ConfigDrawer/ConfigDrawer";
 export interface IAppConfig {
   custoMinuto: number;
   custoKG: number;
-  lucroPadrao: number;
 }
 
 const STORAGE_KEY = "precificacao_3d_config";
@@ -18,7 +17,6 @@ const STORAGE_KEY = "precificacao_3d_config";
 export const defaultConfig: IAppConfig = {
   custoMinuto: 0.03,
   custoKG: 100,
-  lucroPadrao: 30,
 };
 
 interface IAppConfigContext {
