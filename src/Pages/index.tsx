@@ -18,6 +18,7 @@ import { useIndex } from "./useIndex";
 import "../Styles/galaxy.css";
 import { useAppThemeContext } from "../Contexts";
 import { DarkMode, LightMode, Settings, Save } from "@mui/icons-material";
+import NumericTextField from "../Components/NumericTextField";
 
 export const Precificacao3D = () => {
     const {
@@ -55,9 +56,8 @@ export const Precificacao3D = () => {
                                     color: theme.palette.primary.main,
                                     transition:
                                         "transform 0.8s ease, opacity 0.4s ease",
-                                    transform: `rotate(${
-                                        themeName === "light" ? 0 : 360
-                                    }deg)`,
+                                    transform: `rotate(${themeName === "light" ? 0 : 360
+                                        }deg)`,
                                     opacity: 1,
                                 }}
                             >
@@ -100,29 +100,14 @@ export const Precificacao3D = () => {
                                         name="tempoMin"
                                         control={control}
                                         render={({ field, fieldState }) => (
-                                            <TextField
+                                            <NumericTextField
                                                 {...field}
-                                                onChange={(e) =>
-                                                    field.onChange(
-                                                        e.target.value === ""
-                                                            ? undefined
-                                                            : Number(
-                                                                  e.target.value
-                                                              )
-                                                    )
-                                                }
-                                                value={
-                                                    field.value === undefined
-                                                        ? ""
-                                                        : field.value
-                                                }
+                                                value={field.value ?? ""}
                                                 fullWidth
                                                 type="number"
                                                 label="Tempo (min)"
                                                 error={!!fieldState.error}
-                                                helperText={
-                                                    fieldState.error?.message
-                                                }
+                                                helperText={fieldState.error?.message}
                                                 required
                                             />
                                         )}
@@ -135,29 +120,14 @@ export const Precificacao3D = () => {
                                         name="peso"
                                         control={control}
                                         render={({ field, fieldState }) => (
-                                            <TextField
+                                            <NumericTextField
                                                 {...field}
-                                                onChange={(e) =>
-                                                    field.onChange(
-                                                        e.target.value === ""
-                                                            ? undefined
-                                                            : Number(
-                                                                  e.target.value
-                                                              )
-                                                    )
-                                                }
-                                                value={
-                                                    field.value === undefined
-                                                        ? ""
-                                                        : field.value
-                                                }
+                                                value={field.value ?? ""}
                                                 fullWidth
                                                 type="number"
                                                 label="Peso (g)"
                                                 error={!!fieldState.error}
-                                                helperText={
-                                                    fieldState.error?.message
-                                                }
+                                                helperText={fieldState.error?.message}
                                                 required
                                             />
                                         )}
@@ -170,30 +140,14 @@ export const Precificacao3D = () => {
                                         name="quantide"
                                         control={control}
                                         render={({ field, fieldState }) => (
-                                            <TextField
+                                            <NumericTextField
                                                 {...field}
-                                                onChange={(e) =>
-                                                    field.onChange(
-                                                        e.target.value === ""
-                                                            ? undefined
-                                                            : Number(
-                                                                  e.target.value
-                                                              )
-                                                    )
-                                                }
-                                                value={
-                                                    field.value === undefined
-                                                        ? ""
-                                                        : field.value
-                                                }
-                                                fullWidth
-                                                type="number"
+                                                value={field.value ?? ""}
                                                 label="Quantidade"
-                                                error={!!fieldState.error}
-                                                helperText={
-                                                    fieldState.error?.message
-                                                }
+                                                fullWidth
                                                 required
+                                                error={!!fieldState.error}
+                                                helperText={fieldState.error?.message}
                                             />
                                         )}
                                     />
@@ -212,8 +166,8 @@ export const Precificacao3D = () => {
                                                         e.target.value === ""
                                                             ? undefined
                                                             : Number(
-                                                                  e.target.value
-                                                              )
+                                                                e.target.value
+                                                            )
                                                     )
                                                 }
                                                 value={
@@ -256,8 +210,8 @@ export const Precificacao3D = () => {
                                                         e.target.value === ""
                                                             ? undefined
                                                             : Number(
-                                                                  e.target.value
-                                                              )
+                                                                e.target.value
+                                                            )
                                                     )
                                                 }
                                                 value={
@@ -457,7 +411,7 @@ export const Precificacao3D = () => {
 
                                                                 {!!preview.quantidade &&
                                                                     preview.quantidade >
-                                                                        1 && (
+                                                                    1 && (
                                                                         <>
                                                                             <Typography variant="h6">
                                                                                 Valor
