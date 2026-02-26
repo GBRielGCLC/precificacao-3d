@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { set, SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { yup } from "../Yup";
 import { useAppConfig } from "../Contexts";
 import { ValidationError } from "yup";
@@ -77,7 +77,6 @@ export const useIndex = () => {
         reset,
         setValue,
         watch,
-        formState: { errors },
     } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
