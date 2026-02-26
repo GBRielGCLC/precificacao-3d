@@ -35,7 +35,7 @@ export const Precificacao3D = () => {
     const theme = useTheme();
 
     return (
-        <Container maxWidth="md" className="content-layer">
+        <Container maxWidth="md">
             <Box py={4}>
                 <Box display="flex" justifyContent="space-between">
                     <Typography variant="h4" color="textPrimary">
