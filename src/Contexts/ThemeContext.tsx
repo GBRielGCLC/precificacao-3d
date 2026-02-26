@@ -58,7 +58,7 @@ export const AppThemeProvider: React.FC<IAppThemeProviderProps> = ({ children })
             {/* Da o tema */}
             <ThemeProvider theme={theme}>
                 {/* Box que ocupa todo o espaço com as cores do tema */}
-                <Box height="100vh" bgcolor={theme.palette.background.default}>
+                <Box bgcolor={theme.palette.background.default}>
                     {children}
                 </Box>
             </ThemeProvider>
