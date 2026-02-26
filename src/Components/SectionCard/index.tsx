@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Card, CardContent, Typography, Box, useTheme } from "@mui/material";
+import { CardContent, Typography, Box } from "@mui/material";
 
 interface SectionCardProps {
     title: string;
@@ -12,7 +12,6 @@ export const SectionCard = ({
     icon,
     children,
 }: SectionCardProps) => {
-    const theme = useTheme();
 
     return (
         <Box
