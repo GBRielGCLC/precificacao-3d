@@ -1,8 +1,9 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { set, SubmitHandler, useForm } from "react-hook-form";
 import { yup } from "../Yup";
 import { useAppConfig } from "../Contexts";
+import { ValidationError } from "yup";
 
 export interface IHistoricoItem {
     id: number;
@@ -25,15 +26,46 @@ export interface IForm {
     valorAdicional?: number;
 }
 
+interface IFuncaoCalcular {
+    tempoHora?: number | null;
+    tempoMin?: number | null;
+    peso: number;
+    lucroPercentual: number;
+    valorAdicional?: number;
+    quantidade: number;
+}
+
 const STORAGE_KEY = "precificacao_3d_historico";
 
 const schema = yup.object({
     nome: yup.string(),
-    tempoMin: yup.number().required().positive(),
+
+    tempoHora: yup.number().nullable(),
+    tempoMin: yup.number().nullable(),
+
     peso: yup.number().required().positive(),
     quantide: yup.number().required().positive(),
     lucroPercentual: yup.number().required().min(0),
     valorAdicional: yup.number(),
+}).test("tempo-obrigatorio", function (value) {
+    const { tempoHora, tempoMin } = value || {};
+
+    const valido =
+        (typeof tempoHora === "number" && tempoHora > 0) ||
+        (typeof tempoMin === "number" && tempoMin > 0);
+
+    if (valido) return true;
+
+    return new ValidationError([
+        this.createError({
+            path: "tempoHora",
+            message: "Informe horas ou minutos",
+        }),
+        this.createError({
+            path: "tempoMin",
+            message: "Informe horas ou minutos",
+        }),
+    ]);
 });
 
 export const useIndex = () => {
@@ -45,6 +77,7 @@ export const useIndex = () => {
         reset,
         setValue,
         watch,
+        formState: { errors },
     } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
@@ -54,6 +87,7 @@ export const useIndex = () => {
             quantide: undefined,
             nome: "",
             tempoMin: undefined,
+            tempoHora: undefined,
         },
     });
 
@@ -74,6 +108,13 @@ export const useIndex = () => {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(novo));
     };
 
+    const excluirHistoricoById = (id: number) => {
+        const newHistorico = historico.filter((item) => item.id !== id);
+
+        setHistorico(newHistorico);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(newHistorico));
+    }
+
     const limparHistorico = () => {
         setHistorico([]);
         localStorage.removeItem(STORAGE_KEY);
@@ -81,21 +122,19 @@ export const useIndex = () => {
 
     const calcular = useCallback(
         ({
+            tempoHora,
             tempoMin,
             peso,
             lucroPercentual,
             valorAdicional = 0,
             quantidade,
-        }: {
-            tempoMin: number;
-            peso: number;
-            lucroPercentual: number;
-            valorAdicional?: number;
-            quantidade: number;
-        }) => {
+        }: IFuncaoCalcular) => {
             let custoTempo = 0;
             if (!!tempoMin && tempoMin > 0)
                 custoTempo = tempoMin * config.custoMinuto;
+
+            if (!!tempoHora && tempoHora > 0)
+                custoTempo += tempoHora * 60;
 
             let custoMaterial = 0;
             if (!!peso && peso > 0)
@@ -106,10 +145,10 @@ export const useIndex = () => {
             let valorFinal = custoBase;
             let valorPorcentagem = 0;
 
-            if (!!lucroPercentual && lucroPercentual > 0){
-                
+            if (!!lucroPercentual && lucroPercentual > 0) {
+
                 valorPorcentagem = custoBase * (lucroPercentual / 100)
-                
+
                 valorFinal =
                     custoBase +
                     valorPorcentagem +
@@ -135,6 +174,7 @@ export const useIndex = () => {
 
     const gerarId = () => Date.now() + Math.floor(Math.random() * 1000);
 
+    const tempoHora = watch("tempoHora");
     const tempoMin = watch("tempoMin");
     const peso = watch("peso");
     const lucroPercentual = watch("lucroPercentual");
@@ -145,13 +185,14 @@ export const useIndex = () => {
         //if (!tempoMin || !peso || lucroPercentual === undefined) return null;
 
         return calcular({
+            tempoHora,
             tempoMin,
             peso,
             lucroPercentual,
             valorAdicional,
             quantidade,
         });
-    }, [tempoMin, peso, lucroPercentual, valorAdicional, quantidade, calcular]);
+    }, [tempoHora, tempoMin, peso, lucroPercentual, valorAdicional, quantidade, calcular]);
 
     const onSubmit: SubmitHandler<IForm> = (data) => {
         const { custoBase, valorFinal } = calcular(data);
@@ -171,12 +212,14 @@ export const useIndex = () => {
         openConfig,
 
         historico,
+        excluirHistoricoById,
         limparHistorico,
         //@ts-expect-error
         handleSubmit: handleSubmitHookForm(onSubmit),
         control,
 
         preview: {
+            tempoHora,
             tempoMin,
             peso,
             lucroPercentual,
