@@ -3,9 +3,11 @@ import { TextField, TextFieldProps } from '@mui/material';
 
 type NumericTextFieldProps = Omit<TextFieldProps, 'onChange'> & {
     onChange?: (value: number | undefined) => void;
+    maxValue?: number;
+    minValue?: number;
 };
 
-const NumericTextField = ({ onChange, onKeyDown, ...props }: NumericTextFieldProps) => {
+const NumericTextField = ({ onChange, onKeyDown, maxValue, minValue = 0, ...props }: NumericTextFieldProps) => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const stringValue = e.target.value;
@@ -20,8 +22,15 @@ const NumericTextField = ({ onChange, onKeyDown, ...props }: NumericTextFieldPro
 
         // Se após a limpeza o valor for diferente do original (tinha ponto/vírgula), 
         // ou se for um número válido, atualizamos o estado.
-        if (cleanValue !== "") {
-            onChange?.(Number(cleanValue));
+        if (!!cleanValue && cleanValue !== "") {
+            let transformedValue = Number(cleanValue);
+            if (!!maxValue && transformedValue > maxValue) {
+                transformedValue = maxValue;
+            } else if (!!minValue && transformedValue < minValue) {
+                transformedValue = minValue;
+            }
+
+            onChange?.(transformedValue);
         } else {
             onChange?.(undefined);
         }
@@ -41,12 +50,16 @@ const NumericTextField = ({ onChange, onKeyDown, ...props }: NumericTextFieldPro
             type="number"
             onChange={handleChange}
             onKeyDown={handleKeyDown}
-            inputProps={{
-                min: 0,
-                step: 1, // Indica que o incremento deve ser de 1 em 1
-                inputMode: 'numeric',
-                pattern: '[0-9]*',
-                ...props.inputProps,
+            slotProps={{
+                ...props.slotProps,
+                htmlInput: {
+                    min: minValue,
+                    max: maxValue,
+                    step: 1,
+                    inputMode: "numeric",
+                    pattern: "[0-9]*",
+                    ...(props.slotProps?.htmlInput || {}),
+                },
             }}
         />
     );
