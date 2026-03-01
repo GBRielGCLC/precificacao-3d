@@ -19,7 +19,7 @@ import { DarkMode, LightMode, Settings, Save, Inventory, Scale, AccessTime, Pric
 import NumericTextField from "../Components/NumericTextField";
 import { Historico } from "./Historico";
 import { SectionCard } from "../Components/SectionCard";
-import { PreviewData } from "./Historico/Preview";
+import { PreviewData } from "./Preview";
 
 export const Precificacao3D = () => {
     const {

@@ -133,7 +133,7 @@ export const useIndex = () => {
                 custoTempo = tempoMin * config.custoMinuto;
 
             if (!!tempoHora && tempoHora > 0)
-                custoTempo += tempoHora * 60;
+                custoTempo += (tempoHora * 60) * config.custoMinuto;
 
             let custoMaterial = 0;
             if (!!peso && peso > 0)
