@@ -5,9 +5,10 @@ type NumericTextFieldProps = Omit<TextFieldProps, 'onChange'> & {
     onChange?: (value: number | undefined) => void;
     maxValue?: number;
     minValue?: number;
+    decimal?: boolean;
 };
 
-const NumericTextField = ({ onChange, onKeyDown, maxValue, minValue = 0, ...props }: NumericTextFieldProps) => {
+const NumericTextField = ({ onChange, onKeyDown, maxValue, minValue = 0, decimal = false, ...props }: NumericTextFieldProps) => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const stringValue = e.target.value;
@@ -17,8 +18,9 @@ const NumericTextField = ({ onChange, onKeyDown, maxValue, minValue = 0, ...prop
             return;
         }
 
+        const regex = decimal ? /[^0-9.,]/g : /\D/g;
         // Remove qualquer caractere que não seja dígito (previne colagem de texto inválido)
-        const cleanValue = stringValue.replace(/\D/g, '');
+        const cleanValue = stringValue.replace(regex, '');
 
         // Se após a limpeza o valor for diferente do original (tinha ponto/vírgula), 
         // ou se for um número válido, atualizamos o estado.
@@ -38,7 +40,9 @@ const NumericTextField = ({ onChange, onKeyDown, maxValue, minValue = 0, ...prop
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
         // Bloqueia: sinais (+, -), notação científica (e), e separadores decimais (., ,)
-        if (["-", "+", "e", "E", ".", ","].includes(e.key)) {
+        if (["-", "+", "e", "E",
+            ...(decimal ? [] : [".", ","])
+        ].includes(e.key)) {
             e.preventDefault();
         }
         onKeyDown?.(e);

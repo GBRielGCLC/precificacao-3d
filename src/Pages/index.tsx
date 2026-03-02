@@ -121,6 +121,7 @@ export const Precificacao3D = () => {
                                                             label="Horas"
                                                             error={!!fieldState.error}
                                                             helperText={fieldState.error?.message}
+                                                            decimal
                                                         />
                                                     )}
                                                 />
@@ -140,7 +141,6 @@ export const Precificacao3D = () => {
                                                             error={!!fieldState.error}
                                                             helperText={fieldState.error?.message}
                                                             required
-                                                            maxValue={59}
                                                         />
                                                     )}
                                                 />
@@ -168,6 +168,7 @@ export const Precificacao3D = () => {
                                                             error={!!fieldState.error}
                                                             helperText={fieldState.error?.message}
                                                             required
+                                                            decimal
                                                         />
                                                     )}
                                                 />
@@ -176,7 +177,7 @@ export const Precificacao3D = () => {
                                             {/* quantidade */}
                                             <Grid size={{ xs: 12, sm: 6 }}>
                                                 <Controller
-                                                    name="quantide"
+                                                    name="quantidade"
                                                     control={control}
                                                     render={({ field, fieldState }) => (
                                                         <NumericTextField
