@@ -44,7 +44,7 @@ const schema = yup.object({
     tempoMin: yup.number().nullable(),
 
     peso: yup.number().required().positive(),
-    quantide: yup.number().required().positive(),
+    quantidade: yup.number().required().positive(),
     lucroPercentual: yup.number().required().min(0),
     valorAdicional: yup.number(),
 }).test("tempo-obrigatorio", function (value) {
@@ -83,7 +83,7 @@ export const useIndex = () => {
             lucroPercentual: undefined,
             valorAdicional: undefined,
             peso: undefined,
-            quantide: undefined,
+            quantidade: undefined,
             nome: "",
             tempoMin: undefined,
             tempoHora: undefined,
@@ -178,7 +178,7 @@ export const useIndex = () => {
     const peso = watch("peso");
     const lucroPercentual = watch("lucroPercentual");
     const valorAdicional = watch("valorAdicional");
-    const quantidade = watch("quantide");
+    const quantidade = watch("quantidade");
 
     const preview = useMemo(() => {
         //if (!tempoMin || !peso || lucroPercentual === undefined) return null;
