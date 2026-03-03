@@ -59,7 +59,7 @@ const NumericTextField = ({ onChange, onKeyDown, maxValue, minValue = 0, decimal
                 htmlInput: {
                     min: minValue,
                     max: maxValue,
-                    step: 1,
+                    step: decimal ? 0.1 : 1,
                     inputMode: "numeric",
                     pattern: "[0-9]*",
                     ...(props.slotProps?.htmlInput || {}),
