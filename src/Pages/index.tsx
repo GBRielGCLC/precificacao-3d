@@ -206,29 +206,13 @@ export const Precificacao3D = () => {
                                                     name="lucroPercentual"
                                                     control={control}
                                                     render={({ field, fieldState }) => (
-                                                        <TextField
+                                                        <NumericTextField
                                                             {...field}
-                                                            onChange={(e) =>
-                                                                field.onChange(
-                                                                    e.target.value === ""
-                                                                        ? undefined
-                                                                        : Number(
-                                                                            e.target.value
-                                                                        )
-                                                                )
-                                                            }
-                                                            value={
-                                                                field.value === undefined
-                                                                    ? ""
-                                                                    : field.value
-                                                            }
                                                             fullWidth
                                                             type="number"
                                                             label="Lucro (%)"
                                                             error={!!fieldState.error}
-                                                            helperText={
-                                                                fieldState.error?.message
-                                                            }
+                                                            helperText={fieldState.error?.message}
                                                             required
                                                             slotProps={{
                                                                 input: {
@@ -250,29 +234,14 @@ export const Precificacao3D = () => {
                                                     name="valorAdicional"
                                                     control={control}
                                                     render={({ field, fieldState }) => (
-                                                        <TextField
+                                                        <NumericTextField
                                                             {...field}
-                                                            onChange={(e) =>
-                                                                field.onChange(
-                                                                    e.target.value === ""
-                                                                        ? undefined
-                                                                        : Number(
-                                                                            e.target.value
-                                                                        )
-                                                                )
-                                                            }
-                                                            value={
-                                                                field.value === undefined
-                                                                    ? ""
-                                                                    : field.value
-                                                            }
                                                             fullWidth
                                                             type="number"
                                                             label="Valor Adicional"
                                                             error={!!fieldState.error}
-                                                            helperText={
-                                                                fieldState.error?.message
-                                                            }
+                                                            helperText={fieldState.error?.message}
+                                                            decimal
                                                             slotProps={{
                                                                 input: {
                                                                     startAdornment: (
@@ -311,7 +280,7 @@ export const Precificacao3D = () => {
                 </Grid>
             </Grid>
 
-            <Historico historico={historico} funcoes={{limparHistorico, excluirHistoricoById}}/>
+            <Historico historico={historico} funcoes={{ limparHistorico, excluirHistoricoById }} />
         </Box>
     );
 };
