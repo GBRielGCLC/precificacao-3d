@@ -1,24 +1,14 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { yup } from "../Yup";
+import { yup } from "../Services/Calculo/Yup";
 import { useAppConfig } from "../Contexts";
 import { ValidationError } from "yup";
-
-export interface IHistoricoItem {
-    id: number;
-    nome?: string;
-    tempoMin: number;
-    peso: number;
-    lucroPercentual: number;
-    valorAdicional?: number;
-    custoBase: number;
-    valorFinal: number;
-    data: string;
-}
+import { calcularPreco3d, ICalcularParams } from "../Services/Calculo";
 
 export interface IForm {
     nome?: string;
+    tempoHora?: number;
     tempoMin: number;
     peso: number;
     quantidade: number;
@@ -26,13 +16,9 @@ export interface IForm {
     valorAdicional?: number;
 }
 
-interface IFuncaoCalcular {
-    tempoHora?: number | null;
-    tempoMin?: number | null;
-    peso: number;
-    lucroPercentual: number;
-    valorAdicional?: number;
-    quantidade: number;
+export interface IHistoricoItem extends IForm {
+    id: number;
+    data: string;
 }
 
 const STORAGE_KEY = "precificacao_3d_historico";
@@ -119,55 +105,7 @@ export const useIndex = () => {
         localStorage.removeItem(STORAGE_KEY);
     };
 
-    const calcular = useCallback(
-        ({
-            tempoHora,
-            tempoMin,
-            peso,
-            lucroPercentual,
-            valorAdicional = 0,
-            quantidade,
-        }: IFuncaoCalcular) => {
-            let custoTempo = 0;
-            if (!!tempoMin && tempoMin > 0)
-                custoTempo = tempoMin * config.custoMinuto;
-
-            if (!!tempoHora && tempoHora > 0)
-                custoTempo += (tempoHora * 60) * config.custoMinuto;
-
-            let custoMaterial = 0;
-            if (!!peso && peso > 0)
-                custoMaterial = peso * (config.custoKG / 1000);
-
-            const custoBase = custoTempo + custoMaterial;
-
-            let valorFinal = custoBase;
-            let valorPorcentagem = 0;
-
-            if (!!lucroPercentual && lucroPercentual > 0) {
-
-                valorPorcentagem = custoBase * (lucroPercentual / 100)
-
-                valorFinal =
-                    custoBase +
-                    valorPorcentagem +
-                    valorAdicional;
-            }
-
-            let precoUnidade = valorFinal;
-
-            if (!!quantidade && quantidade > 0)
-                precoUnidade = valorFinal / quantidade;
-
-            return {
-                custoBase,
-                valorFinal,
-                precoUnidade,
-                custoMaterial,
-                custoTempo,
-                valorPorcentagem,
-            };
-        },
+    const calcular = useCallback((data: ICalcularParams) => calcularPreco3d(data),
         [config.custoKG, config.custoMinuto]
     );
 
@@ -181,9 +119,7 @@ export const useIndex = () => {
     const quantidade = watch("quantidade");
 
     const preview = useMemo(() => {
-        //if (!tempoMin || !peso || lucroPercentual === undefined) return null;
-
-        return calcular({
+        return calcularPreco3d({
             tempoHora,
             tempoMin,
             peso,
@@ -191,16 +127,12 @@ export const useIndex = () => {
             valorAdicional,
             quantidade,
         });
-    }, [tempoHora, tempoMin, peso, lucroPercentual, valorAdicional, quantidade, calcular]);
+    }, [tempoHora, tempoMin, peso, lucroPercentual, valorAdicional, quantidade, config]);
 
     const onSubmit: SubmitHandler<IForm> = (data) => {
-        const { custoBase, valorFinal } = calcular(data);
-
         salvarHistorico({
             id: gerarId(),
             ...data,
-            custoBase,
-            valorFinal,
             data: new Date().toLocaleString(),
         });
 
