@@ -106,6 +106,31 @@ export const useIndex = () => {
         localStorage.removeItem(STORAGE_KEY);
     };
 
+    const [dataEdit, setDataEdit] = useState<IHistoricoItem>();
+    const editarHistorico = (item: IHistoricoItem) => {
+        setDataEdit(item);
+
+        reset({
+            nome: item.nome,
+            tempoHora: item.tempoHora,
+            tempoMin: item.tempoMin,
+            peso: item.peso,
+            quantidade: item.quantidade,
+            lucroPercentual: item.lucroPercentual,
+            valorAdicional: item.valorAdicional,
+        }, { keepDefaultValues: true });
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
+    };
+
+    const resetForm = () => {
+        setDataEdit(undefined);
+        reset();
+    };
+
     const gerarId = () => Date.now() + Math.floor(Math.random() * 1000);
 
     const tempoHora = watch("tempoHora");
@@ -131,17 +156,32 @@ export const useIndex = () => {
     }, [tempoHora, tempoMin, peso, lucroPercentual, valorAdicional, quantidade, config]);
 
     const onSubmit: SubmitHandler<IForm> = (data) => {
-        salvarHistorico({
-            id: gerarId(),
-            data: new Date().toLocaleString(),
 
-            valorAdicional: data.valorAdicional ?? 0,
-            resultado: preview,
+        if (dataEdit) {
+            const atualizado: IHistoricoItem = {
+                ...dataEdit,
+                ...data,
+                valorAdicional: data.valorAdicional ?? 0,
+                resultado: preview,
+            };
 
-            ...data,
-        });
+            const novoHistorico = historico.map((item) =>
+                item.id === dataEdit.id ? atualizado : item
+            );
 
-        reset();
+            setHistorico(novoHistorico);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(novoHistorico));
+        } else {
+            salvarHistorico({
+                id: gerarId(),
+                data: new Date().toLocaleString(),
+                valorAdicional: data.valorAdicional ?? 0,
+                resultado: preview,
+                ...data,
+            });
+        }
+
+        resetForm();
     };
 
     return {
@@ -150,9 +190,13 @@ export const useIndex = () => {
         historico,
         excluirHistoricoById,
         limparHistorico,
+        editarHistorico,
+        dataEdit,
+
         //@ts-expect-error
         handleSubmit: handleSubmitHookForm(onSubmit),
         control,
+        resetForm,
 
         preview: {
             tempoHora: tempoHora || 0,
