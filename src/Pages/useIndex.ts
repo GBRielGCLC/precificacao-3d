@@ -19,10 +19,11 @@ export interface IForm {
 
 export type IHistoricoItem = IPreview & IForm & {
     id: number;
-    data: string;
+    data: Date;
 }
 
 const STORAGE_KEY = "precificacao_3d_historico";
+const DEFAULT_LUCRO = 100;
 
 const schema = yup.object({
     nome: yup.string(),
@@ -67,7 +68,7 @@ export const useIndex = () => {
     } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
-            lucroPercentual: undefined,
+            lucroPercentual: DEFAULT_LUCRO,
             valorAdicional: undefined,
             peso: undefined,
             quantidade: undefined,
@@ -76,10 +77,6 @@ export const useIndex = () => {
             tempoHora: undefined,
         },
     });
-
-    useEffect(() => {
-        setValue("lucroPercentual", 50);
-    }, [setValue]);
 
     const [historico, setHistorico] = useState<IHistoricoItem[]>([]);
 
@@ -161,6 +158,7 @@ export const useIndex = () => {
             const atualizado: IHistoricoItem = {
                 ...dataEdit,
                 ...data,
+                data: new Date(),
                 valorAdicional: data.valorAdicional ?? 0,
                 resultado: preview,
             };
@@ -174,7 +172,7 @@ export const useIndex = () => {
         } else {
             salvarHistorico({
                 id: gerarId(),
-                data: new Date().toLocaleString(),
+                data: new Date(),
                 valorAdicional: data.valorAdicional ?? 0,
                 resultado: preview,
                 ...data,
@@ -188,9 +186,11 @@ export const useIndex = () => {
         openConfig,
 
         historico,
-        excluirHistoricoById,
-        limparHistorico,
-        editarHistorico,
+        funcoesHistorico: {
+            excluirHistoricoById,
+            limparHistorico,
+            editarHistorico
+        },
         dataEdit,
 
         //@ts-expect-error

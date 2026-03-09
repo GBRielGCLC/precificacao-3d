@@ -59,7 +59,10 @@ export const HistoricoCard = ({ item, onDelete, onEdit }: Props) => {
                         </Typography>
 
                         <Typography variant="caption" color="text.secondary">
-                            {item.data}
+                            {item.data.toLocaleString([], {
+                                day: '2-digit', month: '2-digit', year: '2-digit',
+                                hour: '2-digit', minute: '2-digit'
+                            })}
                         </Typography>
                     </Box>
 
@@ -70,7 +73,7 @@ export const HistoricoCard = ({ item, onDelete, onEdit }: Props) => {
                                 size="small"
                                 onClick={() => onEdit(item)}
                             >
-                                <Edit fontSize="small" color="success"/>
+                                <Edit fontSize="small" color="success" />
                             </IconButton>
                         )}
 

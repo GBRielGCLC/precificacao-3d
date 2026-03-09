@@ -26,9 +26,7 @@ export const Precificacao3D = () => {
         openConfig,
 
         historico,
-        excluirHistoricoById,
-        limparHistorico,
-        editarHistorico,
+        funcoesHistorico,
         dataEdit,
 
         handleSubmit,
@@ -283,7 +281,11 @@ export const Precificacao3D = () => {
                 </Grid>
             </Grid>
 
-            <Historico historico={historico} funcoes={{ limparHistorico, excluirHistoricoById, editarHistorico }} />
+            {historico.length > 0 &&
+                <Historico
+                historico={historico}
+                funcoes={funcoesHistorico} />
+            }
         </Box>
     );
 };
