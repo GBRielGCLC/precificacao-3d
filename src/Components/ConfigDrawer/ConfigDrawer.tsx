@@ -3,11 +3,11 @@ import {
     Box,
     Typography,
     Divider,
-    TextField,
     Button,
 } from "@mui/material";
 import { Controller } from "react-hook-form";
 import { useConfigDrawer } from "./useConfigDrawer";
+import NumericTextField from "../NumericTextField";
 
 interface Props {
     open: boolean;
@@ -46,9 +46,10 @@ export const ConfigDrawer = ({ open, onClose }: Props) => {
                     name="custoMinuto"
                     control={control}
                     render={({ field }) => (
-                        <TextField
+                        <NumericTextField
                             {...field}
                             type="number"
+                            decimal
                             label="Custo por Minuto (R$)"
                             error={!!errors.custoMinuto}
                             helperText={errors.custoMinuto?.message}
@@ -61,8 +62,9 @@ export const ConfigDrawer = ({ open, onClose }: Props) => {
                     name="custoKG"
                     control={control}
                     render={({ field }) => (
-                        <TextField
+                        <NumericTextField
                             {...field}
+                            decimal
                             type="number"
                             label="Preço do KG"
                             error={!!errors.custoKG}
