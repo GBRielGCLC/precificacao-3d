@@ -1,7 +1,25 @@
 import { Calculate } from "@mui/icons-material";
 import { Box, Card, CardContent, Divider, Grid, Typography } from "@mui/material";
+import { ICalcularResult } from "../../Services/Calculo";
+import { useAppConfig } from "../../Contexts";
 
-export const PreviewData = ({ preview }: any) => {
+export interface IPreview {
+    tempoHora?: number,
+    tempoMin?: number,
+    peso?: number,
+    lucroPercentual?: number,
+    valorAdicional?: number,
+    quantidade?: number,
+    resultado: ICalcularResult,
+}
+
+interface IPreviewProps {
+    preview: IPreview;
+}
+
+export const PreviewData = ({ preview }: IPreviewProps) => {
+    const { config } = useAppConfig();
+
     return (
         <Grid size={{ xs: 12 }}>
             <Card
@@ -41,9 +59,9 @@ export const PreviewData = ({ preview }: any) => {
                                 color="text.secondary"
                             >
                                 Tempo (
-                                {((preview.tempoMin || 0) + (preview.tempoHora * 60 || 0))}{" "}
+                                {((preview.tempoMin || 0) + ((preview?.tempoHora|| 0) * 60 ))}{" "}
                                 min × R${" "}
-                                {preview.config.custoMinuto.toFixed(2)}
+                                {config.custoMinuto.toFixed(2)}
                                 )
                             </Typography>
                             <Typography variant="body2">
@@ -64,7 +82,7 @@ export const PreviewData = ({ preview }: any) => {
                                 Material (
                                 {preview.peso}g × R${" "}
                                 {(
-                                    preview.config.custoKG / 1000
+                                    config.custoKG / 1000
                                 ).toFixed(2)}
                                 )
                             </Typography>

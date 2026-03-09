@@ -1,22 +1,23 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yup } from "../Services/Calculo/Yup";
 import { useAppConfig } from "../Contexts";
 import { ValidationError } from "yup";
-import { calcularPreco3d, ICalcularParams } from "../Services/Calculo";
+import { calcularPreco3d } from "../Services/Calculo";
+import { IPreview } from "./Preview";
 
 export interface IForm {
     nome?: string;
     tempoHora?: number;
-    tempoMin: number;
+    tempoMin?: number;
     peso: number;
     quantidade: number;
     lucroPercentual: number;
     valorAdicional?: number;
 }
 
-export interface IHistoricoItem extends IForm {
+export type IHistoricoItem = IPreview & IForm & {
     id: number;
     data: string;
 }
@@ -105,10 +106,6 @@ export const useIndex = () => {
         localStorage.removeItem(STORAGE_KEY);
     };
 
-    const calcular = useCallback((data: ICalcularParams) => calcularPreco3d(data),
-        [config.custoKG, config.custoMinuto]
-    );
-
     const gerarId = () => Date.now() + Math.floor(Math.random() * 1000);
 
     const tempoHora = watch("tempoHora");
@@ -120,20 +117,28 @@ export const useIndex = () => {
 
     const preview = useMemo(() => {
         return calcularPreco3d({
-            tempoHora,
-            tempoMin,
-            peso,
-            lucroPercentual,
-            valorAdicional,
-            quantidade,
+            config,
+
+            data: {
+                tempoHora: tempoHora || 0,
+                tempoMin: tempoMin || 0,
+                peso,
+                lucroPercentual,
+                valorAdicional,
+                quantidade,
+            }
         });
     }, [tempoHora, tempoMin, peso, lucroPercentual, valorAdicional, quantidade, config]);
 
     const onSubmit: SubmitHandler<IForm> = (data) => {
         salvarHistorico({
             id: gerarId(),
-            ...data,
             data: new Date().toLocaleString(),
+
+            valorAdicional: data.valorAdicional ?? 0,
+            resultado: preview,
+
+            ...data,
         });
 
         reset();
@@ -150,8 +155,8 @@ export const useIndex = () => {
         control,
 
         preview: {
-            tempoHora,
-            tempoMin,
+            tempoHora: tempoHora || 0,
+            tempoMin: tempoMin || 0,
             peso,
             lucroPercentual,
             valorAdicional,

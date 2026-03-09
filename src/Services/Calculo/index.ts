@@ -1,17 +1,29 @@
-import { useAppConfig } from "../../Contexts";
+import { IAppConfig } from "../../Contexts";
 
 export interface ICalcularParams {
-    tempoHora?: number | null;
-    tempoMin?: number | null;
+    tempoHora?: number;
+    tempoMin?: number;
     peso: number;
     lucroPercentual: number;
     valorAdicional?: number;
     quantidade: number;
 }
 
+interface IParams {
+    config: IAppConfig;
+    data: ICalcularParams;
+}
 
-export const calcularPreco3d = (data: ICalcularParams) => {
-    const { config } = useAppConfig();
+export interface ICalcularResult {
+    custoTempo: number;
+    custoMaterial: number;
+    custoBase: number;
+    valorFinal: number;
+    valorPorcentagem: number;
+    precoUnidade: number;
+}
+
+export const calcularPreco3d = ({ data, config }: IParams): ICalcularResult => {
 
     let custoTempo = 0;
     if (!!data.tempoMin && data.tempoMin > 0)
