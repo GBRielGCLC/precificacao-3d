@@ -166,6 +166,12 @@ export const useIndex = () => {
                 item.id === dataEdit.id ? atualizado : item
             );
 
+            // Ordenando por mais recente
+            novoHistorico.sort(
+                (a: IHistoricoItem, b: IHistoricoItem) =>
+                    new Date(b.data).getTime() - new Date(a.data).getTime()
+            );
+
             setHistorico(novoHistorico);
             localStorage.setItem(STORAGE_KEY, JSON.stringify(novoHistorico));
         } else {
