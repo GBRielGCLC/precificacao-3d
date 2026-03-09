@@ -15,7 +15,7 @@ import TextField from "@mui/material/TextField";
 import { useIndex } from "./useIndex";
 import "../Styles/galaxy.css";
 import { useAppThemeContext } from "../Contexts";
-import { DarkMode, LightMode, Settings, Save, Inventory, Scale, AccessTime, PriceChange } from "@mui/icons-material";
+import { DarkMode, LightMode, Settings, Save, Inventory, Scale, AccessTime, PriceChange, Edit } from "@mui/icons-material";
 import NumericTextField from "../Components/NumericTextField";
 import { Historico } from "./Historico";
 import { SectionCard } from "../Components/SectionCard";
@@ -28,6 +28,9 @@ export const Precificacao3D = () => {
         historico,
         excluirHistoricoById,
         limparHistorico,
+        editarHistorico,
+        dataEdit,
+
         handleSubmit,
         control,
 
@@ -79,7 +82,7 @@ export const Precificacao3D = () => {
                 <Grid size={{ xs: 12, sm: 8 }}>
                     <Card sx={{ mt: 4 }}>
                         <CardContent>
-                            <form onSubmit={handleSubmit} noValidate>
+                            <form noValidate>
                                 <Grid container spacing={1}>
 
                                     <SectionCard title="Detalhes" icon={<Inventory />}>
@@ -263,10 +266,10 @@ export const Precificacao3D = () => {
                                         <Button
                                             fullWidth
                                             variant="contained"
-                                            type="submit"
-                                            startIcon={<Save />}
+                                            onClick={handleSubmit}
+                                            startIcon={dataEdit ? <Edit /> : <Save />}
                                         >
-                                            Salvar no Histórico
+                                            {dataEdit ? `Salvar "${dataEdit.nome ?? "Sem nome"}"` : "Salvar no histórico"}
                                         </Button>
                                     </Grid>
                                 </Grid>
@@ -280,7 +283,7 @@ export const Precificacao3D = () => {
                 </Grid>
             </Grid>
 
-            <Historico historico={historico} funcoes={{ limparHistorico, excluirHistoricoById }} />
+            <Historico historico={historico} funcoes={{ limparHistorico, excluirHistoricoById, editarHistorico }} />
         </Box>
     );
 };
