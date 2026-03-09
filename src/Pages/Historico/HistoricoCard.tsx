@@ -17,6 +17,7 @@ import {
     AddShoppingCart,
     AccountBalanceWallet,
     Category,
+    CalendarMonth,
 } from "@mui/icons-material";
 
 import { IHistoricoItem } from "../useIndex";
@@ -53,20 +54,33 @@ export const HistoricoCard = ({ item, onDelete, onEdit }: Props) => {
                     alignItems="center"
                     mb={1}
                 >
-                    <Box>
+                    <Box gap={1} display="flex" flexDirection="column">
                         <Typography variant="subtitle1">
                             {item.nome || "Sem nome"}
                         </Typography>
 
-                        <Typography variant="caption" color="text.secondary">
-                            {item.data.toLocaleString([], {
-                                day: '2-digit', month: '2-digit', year: '2-digit',
-                                hour: '2-digit', minute: '2-digit'
-                            })}
-                        </Typography>
+                        <Box display="flex" gap={1}>
+                            <Typography
+                                variant="caption"
+                                color="text.secondary"
+                                sx={{ display: "flex", gap: 0.5, alignItems: "center" }}
+                            >
+                                <CalendarMonth fontSize="small" />
+                                {new Date(item.data).toLocaleDateString()}
+                            </Typography>
+
+                            <Typography
+                                variant="caption"
+                                color="text.secondary"
+                                sx={{ display: "flex", gap: 0.5, alignItems: "center" }}
+                            >
+                                <AccessTime fontSize="small" />
+                                {new Date(item.data).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                            </Typography>
+                        </Box>
                     </Box>
 
-                    <Box display="flex" gap={1}>
+                    <Box display="flex">
 
                         {onEdit && (
                             <IconButton
@@ -89,7 +103,7 @@ export const HistoricoCard = ({ item, onDelete, onEdit }: Props) => {
                     </Box>
                 </Box>
 
-                <Divider sx={{ mb: 1 }} />
+                <Divider sx={{ my: 1, bgcolor: "white", opacity: "20%", width: "100%" }} />
 
                 {/* TEMPO */}
                 <Box
@@ -150,7 +164,7 @@ export const HistoricoCard = ({ item, onDelete, onEdit }: Props) => {
                     </Box>
                 )}
 
-                <Divider sx={{ my: 1 }} />
+                <Divider sx={{ my: 2, bgcolor: "white", opacity: "20%", width: "100%" }} />
 
                 {/* CUSTO BASE */}
                 <Box
@@ -190,7 +204,7 @@ export const HistoricoCard = ({ item, onDelete, onEdit }: Props) => {
                     </Typography>
                 </Box>
 
-                <Divider sx={{ my: 1 }} />
+                <Divider sx={{ my: 1, bgcolor: "white", opacity: "20%", width: "100%" }} />
 
                 {/* TOTAL */}
                 <Box
