@@ -13,6 +13,10 @@ import {
     AccessTime,
     Scale,
     Calculate,
+    Percent,
+    AddShoppingCart,
+    AccountBalanceWallet,
+    Category,
 } from "@mui/icons-material";
 
 import { IHistoricoItem } from "../useIndex";
@@ -28,6 +32,15 @@ export const HistoricoCard = ({ item, onDelete, onEdit }: Props) => {
 
     const tempoTotal =
         (item.tempoMin || 0) + ((item.tempoHora || 0) * 60);
+
+    const resultado = item.resultado ?? {
+        custoTempo: 0,
+        custoMaterial: 0,
+        custoBase: 0,
+        valorFinal: 0,
+        valorPorcentagem: 0,
+        precoUnidade: 0,
+    };
 
     return (
         <Card sx={{ mb: 2 }}>
@@ -90,7 +103,7 @@ export const HistoricoCard = ({ item, onDelete, onEdit }: Props) => {
                     </Typography>
 
                     <Typography variant="body2">
-                        R$ {item.custoTempo.toFixed(2)}
+                        R$ {resultado.custoTempo.toFixed(2)}
                     </Typography>
                 </Box>
 
@@ -109,7 +122,7 @@ export const HistoricoCard = ({ item, onDelete, onEdit }: Props) => {
                     </Typography>
 
                     <Typography variant="body2">
-                        R$ {item.custoMaterial.toFixed(2)}
+                        R$ {resultado.custoMaterial.toFixed(2)}
                     </Typography>
                 </Box>
 
@@ -119,7 +132,12 @@ export const HistoricoCard = ({ item, onDelete, onEdit }: Props) => {
                         display="flex"
                         justifyContent="space-between"
                     >
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{ display: "flex", gap: 1, alignItems: "center" }}
+                        >
+                            <AddShoppingCart fontSize="small" />
                             Valor adicional
                         </Typography>
 
@@ -136,12 +154,17 @@ export const HistoricoCard = ({ item, onDelete, onEdit }: Props) => {
                     display="flex"
                     justifyContent="space-between"
                 >
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ display: "flex", gap: 1, alignItems: "center" }}
+                    >
+                        <AccountBalanceWallet fontSize="small" />
                         Custo Base
                     </Typography>
 
                     <Typography variant="body2">
-                        R$ {item.custoBase.toFixed(2)}
+                        R$ {resultado.custoBase.toFixed(2)}
                     </Typography>
                 </Box>
 
@@ -150,12 +173,17 @@ export const HistoricoCard = ({ item, onDelete, onEdit }: Props) => {
                     display="flex"
                     justifyContent="space-between"
                 >
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ display: "flex", gap: 1, alignItems: "center" }}
+                    >
+                        <Percent fontSize="small" />
                         Lucro ({item.lucroPercentual}%)
                     </Typography>
 
                     <Typography variant="body2">
-                        R$ {item.valorPorcentagem.toFixed(2)}
+                        R$ {resultado.valorPorcentagem.toFixed(2)}
                     </Typography>
                 </Box>
 
@@ -169,11 +197,7 @@ export const HistoricoCard = ({ item, onDelete, onEdit }: Props) => {
                 >
                     <Typography
                         variant="subtitle1"
-                        sx={{
-                            display: "flex",
-                            gap: 1,
-                            alignItems: "center",
-                        }}
+                        sx={{ display: "flex", gap: 1, alignItems: "center" }}
                     >
                         <Calculate fontSize="small" />
                         Total
@@ -186,7 +210,7 @@ export const HistoricoCard = ({ item, onDelete, onEdit }: Props) => {
                             fontWeight: 700,
                         }}
                     >
-                        R$ {item.valorFinal.toFixed(2)}
+                        R$ {resultado.valorFinal.toFixed(2)}
                     </Typography>
                 </Box>
 
@@ -197,12 +221,17 @@ export const HistoricoCard = ({ item, onDelete, onEdit }: Props) => {
                         justifyContent="space-between"
                         mt={0.5}
                     >
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{ display: "flex", gap: 1, alignItems: "center" }}
+                        >
+                            <Category fontSize="small" />
                             Unidade
                         </Typography>
 
                         <Typography variant="body2">
-                            R$ {item.precoUnidade.toFixed(2)}
+                            R$ {resultado.precoUnidade.toFixed(2)}
                         </Typography>
                     </Box>
                 )}

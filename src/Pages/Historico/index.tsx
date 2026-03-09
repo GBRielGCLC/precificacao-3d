@@ -1,9 +1,7 @@
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Divider, Grid, Typography } from "@mui/material";
 import { History } from "@mui/icons-material";
 import { HistoricoCard } from "./HistoricoCard";
 import { IHistoricoItem } from "../useIndex";
-import { calcularPreco3d } from "../../Services/Calculo";
-
 interface Props {
     historico: IHistoricoItem[];
 
@@ -33,18 +31,25 @@ export const Historico = ({ historico, funcoes }: Props) => {
 
             <Divider sx={{ my: 2 }} />
 
-            {historico.map((item) => {
-                const resultado = calcularPreco3d(item);
-
-                return (
-                    <HistoricoCard
-                        key={item.id}
-                        item={item}
-                        onDelete={funcoes?.excluirHistoricoById}
-                        onEdit={funcoes?.editarHistorico}
-                    />
-                )
-            })}
+            <Grid container spacing={2}>
+                {historico.map((item) => {
+                    return (
+                        <Grid
+                            size={{
+                                xs: 12,
+                                sm: 4
+                            }}
+                        >
+                            <HistoricoCard
+                                key={item.id}
+                                item={item}
+                                onDelete={funcoes?.excluirHistoricoById}
+                                onEdit={funcoes?.editarHistorico}
+                            />
+                        </Grid>
+                    )
+                })}
+            </Grid>
         </Box>
     );
 };
