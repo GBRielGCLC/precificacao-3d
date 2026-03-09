@@ -70,7 +70,7 @@ export const HistoricoCard = ({ item, onDelete, onEdit }: Props) => {
                                 size="small"
                                 onClick={() => onEdit(item)}
                             >
-                                <Edit fontSize="small" />
+                                <Edit fontSize="small" color="success"/>
                             </IconButton>
                         )}
 
