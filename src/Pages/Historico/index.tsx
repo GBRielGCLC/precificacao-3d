@@ -1,22 +1,27 @@
-import { Box, Card, CardContent, Divider, IconButton, Typography } from "@mui/material";
+import { Box, Divider, Grid, IconButton, Typography } from "@mui/material";
+import { Delete, History } from "@mui/icons-material";
+import { HistoricoCard } from "./HistoricoCard";
 import { IHistoricoItem } from "../useIndex";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { History } from "@mui/icons-material";
+interface Props {
+    historico: IHistoricoItem[];
 
-interface IHistoricoProps {
-    historico: IHistoricoItem[]
     funcoes?: {
-        limparHistorico?: () => void
-        excluirHistoricoById?: (id: number) => void
-    }
+        limparHistorico?: () => void;
+        excluirHistoricoById?: (id: number) => void;
+        editarHistorico?: (item: IHistoricoItem) => void;
+    };
 }
-export const Historico = ({ historico, funcoes }: IHistoricoProps) => {
+
+export const Historico = ({ historico, funcoes }: Props) => {
+
     return (
         <Box mt={5}>
+
             <Box
                 display="flex"
                 justifyContent="space-between"
                 alignItems="center"
+                mt={4}
             >
                 <Typography variant="h5" color="textPrimary" sx={{
                     display: "flex",
@@ -29,47 +34,33 @@ export const Historico = ({ historico, funcoes }: IHistoricoProps) => {
 
                 {funcoes && funcoes.limparHistorico && (
                     <IconButton onClick={funcoes.limparHistorico}>
-                        <DeleteIcon sx={{ color: "white" }} />
+                        <Delete color="error" />
                     </IconButton>
                 )}
             </Box>
 
-            <Divider sx={{ my: 2, bgcolor: "white" }} />
+            <Divider sx={{ my: 2, bgcolor: "text.primary" }} />
 
-            {historico.map((item) => (
-                <Card key={item.id} sx={{ mb: 2 }}>
-                    <CardContent>
-                        <Box display='flex' justifyContent='space-between' alignItems='center' >
-                            <Box>
-                                <Typography variant="subtitle1">
-                                    {item.nome || "Sem nome"}
-                                </Typography>
-
-                                <Typography variant="body2">
-                                    Custo Base: R$ {item.custoBase.toFixed(2)}
-                                </Typography>
-
-                                <Typography variant="body2">
-                                    Valor Final: R$ {item.valorFinal.toFixed(2)}
-                                </Typography>
-
-                                <Typography variant="caption">
-                                    {item.data}
-                                </Typography>
-                            </Box>
-
-                            {funcoes?.excluirHistoricoById && (
-                                <IconButton
-                                    size="small"
-                                    onClick={() => funcoes.excluirHistoricoById?.(item.id)}
-                                >
-                                    <DeleteIcon fontSize="small" color="error" />
-                                </IconButton>
-                            )}
-                        </Box>
-                    </CardContent>
-                </Card>
-            ))}
+            <Grid container spacing={2}>
+                {historico.map((item) => {
+                    return (
+                        <Grid
+                            key={item.id}
+                            size={{
+                                xs: 12,
+                                sm: 4
+                            }}
+                        >
+                            <HistoricoCard
+                                key={item.id}
+                                item={item}
+                                onDelete={funcoes?.excluirHistoricoById}
+                                onEdit={funcoes?.editarHistorico}
+                            />
+                        </Grid>
+                    )
+                })}
+            </Grid>
         </Box>
     );
 };

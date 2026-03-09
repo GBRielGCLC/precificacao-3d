@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { yup } from "../../Yup";
+import { yup } from "../../Services/Calculo/Yup";
 import { useAppConfig } from "../../Contexts";
 import { defaultConfig as defaultValues } from "../../Contexts";
 

@@ -1,38 +1,25 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { yup } from "../Yup";
+import { yup } from "../Services/Calculo/Yup";
 import { useAppConfig } from "../Contexts";
 import { ValidationError } from "yup";
-
-export interface IHistoricoItem {
-    id: number;
-    nome?: string;
-    tempoMin: number;
-    peso: number;
-    lucroPercentual: number;
-    valorAdicional?: number;
-    custoBase: number;
-    valorFinal: number;
-    data: string;
-}
+import { calcularPreco3d } from "../Services/Calculo";
+import { IPreview } from "./Preview";
 
 export interface IForm {
     nome?: string;
-    tempoMin: number;
+    tempoHora?: number;
+    tempoMin?: number;
     peso: number;
     quantidade: number;
     lucroPercentual: number;
     valorAdicional?: number;
 }
 
-interface IFuncaoCalcular {
-    tempoHora?: number | null;
-    tempoMin?: number | null;
-    peso: number;
-    lucroPercentual: number;
-    valorAdicional?: number;
-    quantidade: number;
+export type IHistoricoItem = IPreview & IForm & {
+    id: number;
+    data: string;
 }
 
 const STORAGE_KEY = "precificacao_3d_historico";
@@ -119,57 +106,30 @@ export const useIndex = () => {
         localStorage.removeItem(STORAGE_KEY);
     };
 
-    const calcular = useCallback(
-        ({
-            tempoHora,
-            tempoMin,
-            peso,
-            lucroPercentual,
-            valorAdicional = 0,
-            quantidade,
-        }: IFuncaoCalcular) => {
-            let custoTempo = 0;
-            if (!!tempoMin && tempoMin > 0)
-                custoTempo = tempoMin * config.custoMinuto;
+    const [dataEdit, setDataEdit] = useState<IHistoricoItem>();
+    const editarHistorico = (item: IHistoricoItem) => {
+        setDataEdit(item);
 
-            if (!!tempoHora && tempoHora > 0)
-                custoTempo += (tempoHora * 60) * config.custoMinuto;
+        reset({
+            nome: item.nome,
+            tempoHora: item.tempoHora,
+            tempoMin: item.tempoMin,
+            peso: item.peso,
+            quantidade: item.quantidade,
+            lucroPercentual: item.lucroPercentual,
+            valorAdicional: item.valorAdicional,
+        }, { keepDefaultValues: true });
 
-            let custoMaterial = 0;
-            if (!!peso && peso > 0)
-                custoMaterial = peso * (config.custoKG / 1000);
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
+    };
 
-            const custoBase = custoTempo + custoMaterial;
-
-            let valorFinal = custoBase;
-            let valorPorcentagem = 0;
-
-            if (!!lucroPercentual && lucroPercentual > 0) {
-
-                valorPorcentagem = custoBase * (lucroPercentual / 100)
-
-                valorFinal =
-                    custoBase +
-                    valorPorcentagem +
-                    valorAdicional;
-            }
-
-            let precoUnidade = valorFinal;
-
-            if (!!quantidade && quantidade > 0)
-                precoUnidade = valorFinal / quantidade;
-
-            return {
-                custoBase,
-                valorFinal,
-                precoUnidade,
-                custoMaterial,
-                custoTempo,
-                valorPorcentagem,
-            };
-        },
-        [config.custoKG, config.custoMinuto]
-    );
+    const resetForm = () => {
+        setDataEdit(undefined);
+        reset();
+    };
 
     const gerarId = () => Date.now() + Math.floor(Math.random() * 1000);
 
@@ -181,30 +141,47 @@ export const useIndex = () => {
     const quantidade = watch("quantidade");
 
     const preview = useMemo(() => {
-        //if (!tempoMin || !peso || lucroPercentual === undefined) return null;
+        return calcularPreco3d({
+            config,
 
-        return calcular({
-            tempoHora,
-            tempoMin,
-            peso,
-            lucroPercentual,
-            valorAdicional,
-            quantidade,
+            data: {
+                tempoHora: tempoHora || 0,
+                tempoMin: tempoMin || 0,
+                peso,
+                lucroPercentual,
+                valorAdicional,
+                quantidade,
+            }
         });
-    }, [tempoHora, tempoMin, peso, lucroPercentual, valorAdicional, quantidade, calcular]);
+    }, [tempoHora, tempoMin, peso, lucroPercentual, valorAdicional, quantidade, config]);
 
     const onSubmit: SubmitHandler<IForm> = (data) => {
-        const { custoBase, valorFinal } = calcular(data);
 
-        salvarHistorico({
-            id: gerarId(),
-            ...data,
-            custoBase,
-            valorFinal,
-            data: new Date().toLocaleString(),
-        });
+        if (dataEdit) {
+            const atualizado: IHistoricoItem = {
+                ...dataEdit,
+                ...data,
+                valorAdicional: data.valorAdicional ?? 0,
+                resultado: preview,
+            };
 
-        reset();
+            const novoHistorico = historico.map((item) =>
+                item.id === dataEdit.id ? atualizado : item
+            );
+
+            setHistorico(novoHistorico);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(novoHistorico));
+        } else {
+            salvarHistorico({
+                id: gerarId(),
+                data: new Date().toLocaleString(),
+                valorAdicional: data.valorAdicional ?? 0,
+                resultado: preview,
+                ...data,
+            });
+        }
+
+        resetForm();
     };
 
     return {
@@ -213,13 +190,17 @@ export const useIndex = () => {
         historico,
         excluirHistoricoById,
         limparHistorico,
+        editarHistorico,
+        dataEdit,
+
         //@ts-expect-error
         handleSubmit: handleSubmitHookForm(onSubmit),
         control,
+        resetForm,
 
         preview: {
-            tempoHora,
-            tempoMin,
+            tempoHora: tempoHora || 0,
+            tempoMin: tempoMin || 0,
             peso,
             lucroPercentual,
             valorAdicional,
