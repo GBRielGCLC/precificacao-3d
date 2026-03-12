@@ -64,10 +64,11 @@ export const useIndex = () => {
         control,
         reset,
         watch,
+        setValue
     } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
-            lucroPercentual: DEFAULT_LUCRO,
+            lucroPercentual: undefined,
             valorAdicional: undefined,
             peso: undefined,
             quantidade: undefined,
@@ -124,8 +125,12 @@ export const useIndex = () => {
 
     const resetForm = () => {
         setDataEdit(undefined);
-        reset();
+        reset({ lucroPercentual: DEFAULT_LUCRO });
     };
+
+    useEffect(() => {
+        setValue("lucroPercentual", DEFAULT_LUCRO);
+    }, [setValue]);
 
     const gerarId = () => Date.now() + Math.floor(Math.random() * 1000);
 
