@@ -8,11 +8,13 @@ import { defaultConfig as defaultValues } from "../../Contexts";
 export interface IFormConfig {
     custoMinuto: number;
     custoKG: number;
+    enviarComEnter: boolean;
 }
 
 const schema = yup.object({
     custoMinuto: yup.number().required().min(0),
     custoKG: yup.number().required().min(0),
+    enviarComEnter: yup.boolean().default(true),
 });
 
 interface Props {

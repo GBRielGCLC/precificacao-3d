@@ -193,7 +193,7 @@ export const useIndex = () => {
     };
 
     return {
-        openConfig,
+        config, openConfig,
 
         historico,
         funcoesHistorico: {

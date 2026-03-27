@@ -4,6 +4,8 @@ import {
     Typography,
     Divider,
     Button,
+    FormControlLabel,
+    Switch,
 } from "@mui/material";
 import { Controller } from "react-hook-form";
 import { useConfigDrawer } from "./useConfigDrawer";
@@ -71,6 +73,17 @@ export const ConfigDrawer = ({ open, onClose }: Props) => {
                             helperText={errors.custoKG?.message}
                             fullWidth
                         />
+                    )}
+                />
+
+                <Controller
+                    name="enviarComEnter"
+                    control={control}
+                    render={({ field }) => (
+                        <FormControlLabel control={<Switch
+                            checked={!!field.value} // Usa 'checked' em vez de 'value' e garante que é booleano
+                            onChange={field.onChange} />
+                        } label="Enviar com enter" />
                     )}
                 />
 

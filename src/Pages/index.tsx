@@ -23,7 +23,7 @@ import { PreviewData } from "./Preview";
 
 export const Precificacao3D = () => {
     const {
-        openConfig,
+        config, openConfig,
 
         historico,
         funcoesHistorico,
@@ -80,7 +80,7 @@ export const Precificacao3D = () => {
                 <Grid size={{ xs: 12, sm: 8 }}>
                     <Card sx={{ mt: 4 }}>
                         <CardContent>
-                            <form noValidate>
+                            <form noValidate onSubmit={config.enviarComEnter ? handleSubmit : undefined}>
                                 <Grid container spacing={1}>
 
                                     <SectionCard title="Detalhes" icon={<Inventory />}>
@@ -265,6 +265,7 @@ export const Precificacao3D = () => {
                                             fullWidth
                                             variant="contained"
                                             onClick={handleSubmit}
+                                            {...config.enviarComEnter ? { type: "submit" } : {}}
                                             startIcon={dataEdit ? <Edit /> : <Save />}
                                         >
                                             {dataEdit ? `Salvar "${dataEdit.nome ?? "Sem nome"}"` : "Salvar no histórico"}
