@@ -42,14 +42,12 @@ export const calcularPreco3d = ({ data, config }: IParams): ICalcularResult => {
     let valorPorcentagem = 0;
 
     if (!!data.lucroPercentual && data.lucroPercentual > 0) {
-
         valorPorcentagem = custoBase * (data.lucroPercentual / 100)
 
-        valorFinal =
-            custoBase +
-            valorPorcentagem +
-            (data.valorAdicional ?? 0);
+        valorFinal = custoBase + valorPorcentagem
     }
+
+    valorFinal += (data.valorAdicional ?? 0);
 
     let precoUnidade = valorFinal;
 
