@@ -1,4 +1,4 @@
-import { Calculate } from "@mui/icons-material";
+import { AccessTime, Calculate, MonetizationOn, PointOfSale, PriceChange, Scale } from "@mui/icons-material";
 import { Box, Card, CardContent, Divider, Grid, Typography } from "@mui/material";
 import { ICalcularResult } from "../../Services/Calculo";
 import { useAppConfig } from "../../Contexts";
@@ -57,9 +57,15 @@ export const PreviewData = ({ preview }: IPreviewProps) => {
                             <Typography
                                 variant="body2"
                                 color="text.secondary"
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 1,
+                                }}
                             >
+                                <AccessTime fontSize="small" />
                                 Tempo (
-                                {((preview.tempoMin || 0) + ((preview?.tempoHora|| 0) * 60 ))}{" "}
+                                {((preview.tempoMin || 0) + ((preview?.tempoHora || 0) * 60))}{" "}
                                 min × R${" "}
                                 {config.custoMinuto.toFixed(2)}
                                 )
@@ -78,7 +84,13 @@ export const PreviewData = ({ preview }: IPreviewProps) => {
                             <Typography
                                 variant="body2"
                                 color="text.secondary"
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 1,
+                                }}
                             >
+                                <Scale fontSize="small" />
                                 Material (
                                 {preview.peso}g × R${" "}
                                 {(
@@ -101,7 +113,13 @@ export const PreviewData = ({ preview }: IPreviewProps) => {
                                 <Typography
                                     variant="body2"
                                     color="text.secondary"
+                                    sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: 1,
+                                    }}
                                 >
+                                    <PriceChange fontSize="small" />
                                     Valor adicional
                                 </Typography>
                                 <Typography variant="body2">
@@ -123,7 +141,13 @@ export const PreviewData = ({ preview }: IPreviewProps) => {
                                     <Typography
                                         variant="body2"
                                         color="text.secondary"
+                                        sx={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: 1,
+                                        }}
                                     >
+                                        <PointOfSale fontSize="small" />
                                         Custo Base
                                     </Typography>
                                     <Typography variant="body2">
@@ -140,7 +164,13 @@ export const PreviewData = ({ preview }: IPreviewProps) => {
                                     <Typography
                                         variant="body2"
                                         color="text.secondary"
+                                        sx={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: 1,
+                                        }}
                                     >
+                                        <MonetizationOn fontSize="small" />
                                         Lucro (
                                         {
                                             preview.lucroPercentual
