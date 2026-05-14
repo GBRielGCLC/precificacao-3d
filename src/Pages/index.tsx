@@ -107,52 +107,6 @@ export const Precificacao3D = () => {
 
                                     <Divider sx={{ my: 2, bgcolor: "white", opacity: "20%", width: "100%" }} />
 
-                                    <SectionCard title="Tempo de Impressão" icon={<AccessTime />}>
-                                        <Grid container spacing={2}>
-                                            {/* Tempo */}
-                                            <Grid size={{ xs: 12, sm: 6 }}>
-                                                <Controller
-                                                    name="tempoHora"
-                                                    control={control}
-                                                    render={({ field, fieldState }) => (
-                                                        <NumericTextField
-                                                            {...field}
-                                                            value={field.value ?? ""}
-                                                            fullWidth
-                                                            type="number"
-                                                            label="Horas"
-                                                            error={!!fieldState.error}
-                                                            helperText={fieldState.error?.message}
-                                                            decimal
-                                                        />
-                                                    )}
-                                                />
-                                            </Grid>
-
-                                            <Grid size={{ xs: 12, sm: 6 }}>
-                                                <Controller
-                                                    name="tempoMin"
-                                                    control={control}
-                                                    render={({ field, fieldState }) => (
-                                                        <NumericTextField
-                                                            {...field}
-                                                            value={field.value ?? ""}
-                                                            fullWidth
-                                                            type="number"
-                                                            label="Minutos"
-                                                            error={!!fieldState.error}
-                                                            helperText={fieldState.error?.message}
-                                                            required
-                                                        />
-                                                    )}
-                                                />
-                                            </Grid>
-
-                                        </Grid>
-                                    </SectionCard>
-
-                                    <Divider sx={{ my: 2, bgcolor: "white", opacity: "20%", width: "100%" }} />
-
                                     <SectionCard title="Material" icon={<Scale />}>
                                         <Grid container spacing={2}>
                                             {/* Peso */}
@@ -194,6 +148,52 @@ export const Precificacao3D = () => {
                                                     )}
                                                 />
                                             </Grid>
+                                        </Grid>
+                                    </SectionCard>
+
+                                    <Divider sx={{ my: 2, bgcolor: "white", opacity: "20%", width: "100%" }} />
+
+                                    <SectionCard title="Tempo de Impressão" icon={<AccessTime />}>
+                                        <Grid container spacing={2}>
+                                            {/* Tempo */}
+                                            <Grid size={{ xs: 12, sm: 6 }}>
+                                                <Controller
+                                                    name="tempoHora"
+                                                    control={control}
+                                                    render={({ field, fieldState }) => (
+                                                        <NumericTextField
+                                                            {...field}
+                                                            value={field.value ?? ""}
+                                                            fullWidth
+                                                            type="number"
+                                                            label="Horas"
+                                                            error={!!fieldState.error}
+                                                            helperText={fieldState.error?.message}
+                                                            decimal
+                                                        />
+                                                    )}
+                                                />
+                                            </Grid>
+
+                                            <Grid size={{ xs: 12, sm: 6 }}>
+                                                <Controller
+                                                    name="tempoMin"
+                                                    control={control}
+                                                    render={({ field, fieldState }) => (
+                                                        <NumericTextField
+                                                            {...field}
+                                                            value={field.value ?? ""}
+                                                            fullWidth
+                                                            type="number"
+                                                            label="Minutos"
+                                                            error={!!fieldState.error}
+                                                            helperText={fieldState.error?.message}
+                                                            required
+                                                        />
+                                                    )}
+                                                />
+                                            </Grid>
+
                                         </Grid>
                                     </SectionCard>
 
