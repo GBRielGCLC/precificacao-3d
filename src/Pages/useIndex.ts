@@ -25,6 +25,8 @@ export type IHistoricoItem = IPreview & IForm & {
 const STORAGE_KEY = "precificacao_3d_historico";
 const DEFAULT_LUCRO = 100;
 
+const gerarId = () => Date.now() + Math.floor(Math.random() * 1000);
+
 const schema = yup.object({
     nome: yup.string(),
 
@@ -103,6 +105,17 @@ export const useIndex = () => {
         localStorage.removeItem(STORAGE_KEY);
     };
 
+    const importarHistorico = (items: IHistoricoItem[]) => {
+        const idsExistentes = new Set(historico.map((i) => i.id));
+        const itemsAjustados = items.map((item) => ({
+            ...item,
+            id: idsExistentes.has(item.id) ? gerarId() : item.id,
+        }));
+        const novo = [...historico, ...itemsAjustados];
+        setHistorico(novo);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(novo));
+    };
+
     const [dataEdit, setDataEdit] = useState<IHistoricoItem>();
     const editarHistorico = (item: IHistoricoItem) => {
         setDataEdit(item);
@@ -131,8 +144,6 @@ export const useIndex = () => {
     useEffect(() => {
         setValue("lucroPercentual", DEFAULT_LUCRO);
     }, [setValue]);
-
-    const gerarId = () => Date.now() + Math.floor(Math.random() * 1000);
 
     const tempoHora = watch("tempoHora");
     const tempoMin = watch("tempoMin");
@@ -193,9 +204,10 @@ export const useIndex = () => {
     };
 
     return {
-        config, openConfig,
+config, openConfig,
 
         historico,
+        importarHistorico,
         funcoesHistorico: {
             excluirHistoricoById,
             limparHistorico,

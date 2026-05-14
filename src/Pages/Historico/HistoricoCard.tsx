@@ -4,12 +4,14 @@ import {
     CardContent,
     Divider,
     IconButton,
+    Tooltip,
     Typography,
 } from "@mui/material";
 
 import {
     Delete,
     Edit,
+    FileUpload,
     AccessTime,
     Scale,
     Calculate,
@@ -27,9 +29,10 @@ interface Props {
 
     onDelete?: (id: number) => void;
     onEdit?: (item: IHistoricoItem) => void;
+    onExport?: (items: IHistoricoItem[]) => void;
 }
 
-export const HistoricoCard = ({ item, onDelete, onEdit }: Props) => {
+export const HistoricoCard = ({ item, onDelete, onEdit, onExport }: Props) => {
 
     const tempoTotal =
         (item.tempoMin || 0) + ((item.tempoHora || 0) * 60);
@@ -76,30 +79,43 @@ export const HistoricoCard = ({ item, onDelete, onEdit }: Props) => {
                             >
                                 <AccessTime fontSize="small" />
                                 {new Date(item.data).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                            </Typography>
+</Typography>
                         </Box>
                     </Box>
 
-                    <Box display="flex">
+<Box display="flex">
+                        {onExport && (
+                            <Tooltip title="Exportar item">
+                                <IconButton
+                                    size="small"
+                                    onClick={() => onExport([item])}
+                                >
+                                    <FileUpload fontSize="small" color="primary" />
+                                </IconButton>
+                            </Tooltip>
+                        )}
 
                         {onEdit && (
-                            <IconButton
-                                size="small"
-                                onClick={() => onEdit(item)}
-                            >
-                                <Edit fontSize="small" color="success" />
-                            </IconButton>
+                            <Tooltip title="Editar item">
+                                <IconButton
+                                    size="small"
+                                    onClick={() => onEdit(item)}
+                                >
+                                    <Edit fontSize="small" color="success" />
+                                </IconButton>
+                            </Tooltip>
                         )}
 
                         {onDelete && (
-                            <IconButton
-                                size="small"
-                                onClick={() => onDelete(item.id)}
-                            >
-                                <Delete fontSize="small" color="error" />
-                            </IconButton>
+                            <Tooltip title="Excluir item">
+                                <IconButton
+                                    size="small"
+                                    onClick={() => onDelete(item.id)}
+                                >
+                                    <Delete fontSize="small" color="error" />
+                                </IconButton>
+                            </Tooltip>
                         )}
-
                     </Box>
                 </Box>
 
