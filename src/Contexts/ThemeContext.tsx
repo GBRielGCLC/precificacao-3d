@@ -1,5 +1,5 @@
-import { createContext, useCallback, useContext, useMemo, useState } from 'react';
-import { ThemeProvider, Box, CssBaseline } from '@mui/material';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { ThemeProvider, Box } from '@mui/material';
 
 import { DarkTheme, LightTheme } from '../Themes';
 
@@ -8,10 +8,8 @@ interface IThemeContextData {// Define as propiedades compartilhadas no contexto
     toggleTheme: () => void;// Alterna os temas
 }
 
-// O contexto recebe as propiedades compartilhadas
 const ThemeContext = createContext({} as IThemeContextData);
 
-//Hook para usar o toggle theme em qualquer parte da aplicação
 export const useAppThemeContext = () => {
     return useContext(ThemeContext);
 }
@@ -32,15 +30,42 @@ export const AppThemeProvider: React.FC<IAppThemeProviderProps> = ({ children })
         }
 
     }
-    //Use state com tema light como padrão, light ou dark como parâmetro de tipagem
     const [themeName, setThemeName] = useState<'light' | 'dark'>(localStorageThemeName);
 
-    //Use callback para saber qual o tema anterior e fazer a troca
-    const toggleTheme = useCallback(() => {
-        setThemeName(oldThemeName => oldThemeName === 'light' ? 'dark' : 'light');
+    useEffect(() => {
+        if (!document.getElementById('view-transition-styles')) {
+            const style = document.createElement('style');
+            style.id = 'view-transition-styles';
+            style.textContent = `
+                ::view-transition-old(root) {
+                    animation: none;
+                }
+                ::view-transition-new(root) {
+                    animation: clip-reveal 1500ms ease-in-out;
+                }
+                @keyframes clip-reveal {
+                    from {
+                        clip-path: circle(0 at var(--toggle-x, 50%) var(--toggle-y, 50%));
+                    }
+                    to {
+                        clip-path: circle(150% at var(--toggle-x, 50%) var(--toggle-y, 50%));
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
     }, []);
 
-    //Retorna o tema light ou dark
+    const toggleTheme = useCallback(() => {
+        if ((document as any).startViewTransition) {
+            (document as any).startViewTransition(() => {
+                setThemeName(oldThemeName => oldThemeName === 'light' ? 'dark' : 'light');
+            });
+        } else {
+            setThemeName(oldThemeName => oldThemeName === 'light' ? 'dark' : 'light');
+        }
+    }, []);
+
     const theme = useMemo(() => {
         localStorage.setItem('themeName', themeName);
 
@@ -49,16 +74,10 @@ export const AppThemeProvider: React.FC<IAppThemeProviderProps> = ({ children })
         }
     }, [themeName]);
 
-
     return (
-        // Da a propriedade para todos que estão abaixo e passa como filho 
         <ThemeContext.Provider value={{ themeName, toggleTheme }}>
-            <CssBaseline />
-
-            {/* Da o tema */}
             <ThemeProvider theme={theme}>
-                {/* Box que ocupa todo o espaço com as cores do tema */}
-                <Box bgcolor={theme.palette.background.default}>
+                <Box minHeight="100vh" bgcolor={theme.palette.background.default}>
                     {children}
                 </Box>
             </ThemeProvider>

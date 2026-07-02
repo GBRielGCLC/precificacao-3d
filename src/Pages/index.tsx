@@ -20,6 +20,7 @@ import NumericTextField from "../Components/NumericTextField";
 import { Historico } from "./Historico";
 import { SectionCard } from "../Components/SectionCard";
 import { PreviewData } from "./Preview";
+import { ToggleThemeButton } from "../Components/ToggleThemeButton";
 
 export const Precificacao3D = () => {
     const {
@@ -50,27 +51,7 @@ export const Precificacao3D = () => {
                         <Settings />
                     </IconButton>
 
-                    <IconButton onClick={toggleTheme} color="inherit">
-                        <Box
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                color: theme.palette.primary.main,
-                                transition:
-                                    "transform 0.8s ease, opacity 0.4s ease",
-                                transform: `rotate(${themeName === "light" ? 0 : 360
-                                    }deg)`,
-                                opacity: 1,
-                            }}
-                        >
-                            {themeName === "light" ? (
-                                <DarkMode />
-                            ) : (
-                                <LightMode />
-                            )}
-                        </Box>
-                    </IconButton>
+                    <ToggleThemeButton/>
                 </Box>
             </Box>
 
