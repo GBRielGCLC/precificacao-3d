@@ -7,15 +7,13 @@ import {
     IconButton,
     Typography,
     Divider,
-    useTheme,
     InputAdornment,
 } from "@mui/material";
 import { Controller } from "react-hook-form";
 import TextField from "@mui/material/TextField";
 import { useIndex } from "./useIndex";
 import "../Styles/galaxy.css";
-import { useAppThemeContext } from "../Contexts";
-import { DarkMode, LightMode, Settings, Save, Inventory, Scale, AccessTime, PriceChange, Edit } from "@mui/icons-material";
+import { Settings, Save, Inventory, Scale, AccessTime, PriceChange, Edit } from "@mui/icons-material";
 import NumericTextField from "../Components/NumericTextField";
 import { Historico } from "./Historico";
 import { SectionCard } from "../Components/SectionCard";
@@ -36,8 +34,6 @@ export const Precificacao3D = () => {
 
         preview,
     } = useIndex();
-    const { toggleTheme, themeName } = useAppThemeContext();
-    const theme = useTheme();
 
     return (
         <Box px={6} py={4}>
